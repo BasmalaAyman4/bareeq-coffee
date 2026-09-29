@@ -19,17 +19,27 @@ export function Picture({
   product: Product;
   large?: boolean;
 }) {
-  const image = product.image
+  // Keep drink cards visually consistent even when the source menu has no
+  // product photo. Matcha and Refreshers use the closest branded drink visual
+  // instead of falling back to the generic coffee placeholder.
+  const sourceImage =
+    product.image ||
+    (product.category === 'Matcha'
+      ? '/assets/matcha.webp'
+      : product.category === 'Refreshers'
+        ? '/assets/berry.webp'
+        : undefined);
+  const image = sourceImage
     ? typeof window !== 'undefined' && window.location.pathname.startsWith('/bareeq-coffee')
-      ? '/bareeq-coffee' + product.image
-      : product.image
+      ? '/bareeq-coffee' + sourceImage
+      : sourceImage
     : undefined;
-  return product.image ? (
+  return sourceImage ? (
     <img
       src={image}
       alt={
         product.name +
-        (product.illustrative
+        (!product.image || product.illustrative
           ? ' — illustrative drink visual'
           : ' — Bareeq product photograph')
       }
