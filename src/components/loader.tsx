@@ -48,7 +48,7 @@ export function Loader() {
     Promise.all(
       assets.map((src) => {
         const img = new Image();
-        img.src = '/assets/' + src;
+        img.src = (location.pathname.startsWith('/bareeq-coffee') ? '/bareeq-coffee' : '') + '/assets/' + src;
         return img.decode().catch(() => {});
       }),
     ).then(() => {

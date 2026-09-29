@@ -19,9 +19,14 @@ export function Picture({
   product: Product;
   large?: boolean;
 }) {
+  const image = product.image
+    ? typeof window !== 'undefined' && window.location.pathname.startsWith('/bareeq-coffee')
+      ? '/bareeq-coffee' + product.image
+      : product.image
+    : undefined;
   return product.image ? (
     <img
-      src={product.image}
+      src={image}
       alt={
         product.name +
         (product.illustrative
