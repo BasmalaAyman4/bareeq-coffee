@@ -1,0 +1,20 @@
+# Generated dependencies and website
+/node_modules/
+/dist/
+
+# Local state and caches
+/.npm-cache/
+/.sites-runtime/
+/.wrangler/
+/.agents/
+/.codex/
+*.tsbuildinfo
+*.log
+
+# Private environment values
+.env*
+!.env.example
+
+# Operating system files
+.DS_Store
+Thumbs.db
