@@ -21,7 +21,7 @@ export function createDocument(title, content) {
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
     <meta name="theme-color" content="#741F28">
     <title>${escapeHtml(title)} | Bareeq</title>
     <meta name="description" content="Explore Bareeq coffee, cakes and savory bites. Find us in Helwan, Mostafa Safwat Street.">

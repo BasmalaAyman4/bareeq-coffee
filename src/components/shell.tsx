@@ -1,9 +1,16 @@
-import { Button } from '@/components/ui/button';
 import Link, { usePathname } from '@/router';
-import { ArrowUpRight, Menu as MenuIcon, ShoppingBag, X } from 'lucide-react';
-import { useEffect, useState, type ReactNode } from 'react';
+import { ArrowUpRight, Coffee, House, MapPin, ShoppingBag } from 'lucide-react';
+import { type ReactNode } from 'react';
 import { Loader } from './loader';
 import { useCart } from './cart-provider';
+
+const mobileTabs = [
+  { href: '/', label: 'Home', icon: House },
+  { href: '/menu', label: 'Menu', icon: Coffee },
+  { href: '/locations', label: 'Locations', icon: MapPin },
+  { href: '/cart', label: 'Bag', icon: ShoppingBag },
+];
+
 export function Brand() {
   return (
     <img
@@ -17,20 +24,16 @@ export function Brand() {
 }
 
 export function Shell({ children }: { children: ReactNode }) {
-  const path = usePathname();
-  const [open, setOpen] = useState(false);
+  const path = usePathname().replace(/\/$/, '') || '/';
   const { cart, notice } = useCart();
-  useEffect(() => {
-    setOpen(false);
-  }, [path]);
-  useEffect(() => {
-    const fn = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') setOpen(false);
-    };
-    document.addEventListener('keydown', fn);
-    return () => document.removeEventListener('keydown', fn);
-  }, []);
   const count = cart.reduce((n, l) => n + l.quantity, 0);
+  const activeTab =
+    ['/menu', '/cakes', '/savory'].includes(path) ||
+    path.startsWith('/product/')
+      ? '/menu'
+      : path === '/checkout'
+        ? '/cart'
+        : path;
   return (
     <>
       <a href="#main" className="skip-link">
@@ -43,7 +46,7 @@ export function Shell({ children }: { children: ReactNode }) {
           </Link>
           <nav
             aria-label="Main navigation"
-            className={open ? 'main-nav open' : 'main-nav'}
+            className="main-nav"
             id="main-navigation"
           >
             {[
@@ -74,16 +77,6 @@ export function Shell({ children }: { children: ReactNode }) {
             <Link href="/menu" className="button header-order">
               Order now <ArrowUpRight size={16} />
             </Link>
-            <Button
-              className="icon-button mobile-toggle"
-              variant="ghost"
-              onClick={() => setOpen(!open)}
-              aria-expanded={open}
-              aria-controls="main-navigation"
-              aria-label={open ? 'Close navigation' : 'Open navigation'}
-            >
-              {open ? <X /> : <MenuIcon />}
-            </Button>
           </div>
         </header>
         <main id="main" tabIndex={-1}>
@@ -118,6 +111,29 @@ export function Shell({ children }: { children: ReactNode }) {
             </nav>
           </div>
         </footer>
+        <nav className="mobile-nav" aria-label="Mobile navigation">
+          {mobileTabs.map(({ href, label, icon: Icon }) => (
+            <Link
+              key={href}
+              href={href}
+              className="mobile-nav-link"
+              aria-current={activeTab === href ? 'page' : undefined}
+              aria-label={
+                href === '/cart' ? `Shopping bag, ${count} items` : undefined
+              }
+            >
+              <span className="mobile-nav-icon">
+                <Icon size={22} strokeWidth={1.8} aria-hidden="true" />
+                {href === '/cart' && count > 0 && (
+                  <span className="mobile-nav-count" aria-hidden="true">
+                    {count > 99 ? '99+' : count}
+                  </span>
+                )}
+              </span>
+              <span>{label}</span>
+            </Link>
+          ))}
+        </nav>
       </div>
       <div
         className={'toast ' + (notice ? 'visible' : '')}
