@@ -104,7 +104,7 @@ Deno.serve(async (req) => {
   const origin = req.headers.get('Origin') ?? '';
   const origins = (
     Deno.env.get('ALLOWED_ORIGINS') ??
-    'https://bareeq-coffee.web.app,https://bareeq-coffee.firebaseapp.com,http://127.0.0.1:5173,http://localhost:5173,http://127.0.0.1:5174,http://127.0.0.1:5175'
+    'https://bareeq-coffee.web.app,https://bareeq-coffee.firebaseapp.com,https://basmalaayman4.github.io,http://127.0.0.1:5173,http://localhost:5173,http://127.0.0.1:5174,http://127.0.0.1:5175'
   )
     .split(',')
     .filter(Boolean);

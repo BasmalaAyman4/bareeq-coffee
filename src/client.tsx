@@ -1,9 +1,16 @@
-import { hydrateRoot } from 'react-dom/client';
+import { createRoot, hydrateRoot } from 'react-dom/client';
 import { App } from './app';
 import { ServerPath } from './router';
-hydrateRoot(
-  document.getElementById('root')!,
+const app = (
   <ServerPath.Provider value={location.pathname}>
     <App />
-  </ServerPath.Provider>,
+  </ServerPath.Provider>
 );
+// Staff pages depend on an auth session and browser-only Supabase state. They
+// intentionally render a fresh client tree so a stale static login shell can
+// never cause a React hydration mismatch after deployment.
+if (/^\/(dashboard|founder|cashier)(\/|$)/.test(location.pathname)) {
+  createRoot(document.getElementById('root')!).render(app);
+} else {
+  hydrateRoot(document.getElementById('root')!, app);
+}
