@@ -125,7 +125,12 @@ export function useCheckout({
       result.payment_method === 'instapay' &&
       result.status === 'awaiting_receipt'
     ) {
-      await uploadReceipt(result, next);
+      try {
+        await uploadReceipt(result, next);
+      } catch (error) {
+        setOrder(result);
+        throw error;
+      }
     } else {
       setOrder(result);
       setConfirmationOpen(true);
