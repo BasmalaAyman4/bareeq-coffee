@@ -200,6 +200,13 @@ Deno.serve(async (req) => {
     const body = JSON.parse(raw);
     let result;
     switch (body.action) {
+      case 'push_config': {
+        object(body, ['action']);
+        await staff(req);
+        const runtime = await rpc('bareeq_runtime', {});
+        result = { publicKey: runtime.vapid_public ?? '' };
+        break;
+      }
       case 'quote':
         object(body, ['action', 'order'], ['order']);
         result = await rpc('bareeq_quote', { p: checkout(body.order) });

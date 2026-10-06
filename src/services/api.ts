@@ -18,6 +18,10 @@ export async function api<T = any>(
   });
   const result = await response.json();
   if (!response.ok)
-    throw new Error(result.error ?? 'Unable to reach Bareeq. Please retry.');
+    throw new Error(
+      result.error === 'INVALID_PHONE'
+        ? 'Enter a valid Egyptian mobile number, such as 01012345678.'
+        : (result.error ?? 'Unable to reach Bareeq. Please retry.'),
+    );
   return result;
 }

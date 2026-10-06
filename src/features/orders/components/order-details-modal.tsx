@@ -115,28 +115,30 @@ export function OrderDetailsModal({
               )}
             </>
           )}
-          {selected.source !== 'cashier' && nextStatus[selected.status] && (
-            <div className="staff-actions">
-              <button
-                disabled={busy}
-                className="button"
-                onClick={() =>
-                  transition(selected, nextStatus[selected.status])
-                }
-              >
-                {nextStatus[selected.status] === 'completed'
-                  ? t('completed')
-                  : nextStatus[selected.status]}
-              </button>
-              <button
-                disabled={busy}
-                className="button outline"
-                onClick={() => transition(selected, 'cancelled')}
-              >
-                {t('cancel')} {t('orders').toLowerCase()}
-              </button>
-            </div>
-          )}
+          {!founder &&
+            selected.source !== 'cashier' &&
+            nextStatus[selected.status] && (
+              <div className="staff-actions">
+                <button
+                  disabled={busy}
+                  className="button"
+                  onClick={() =>
+                    transition(selected, nextStatus[selected.status])
+                  }
+                >
+                  {nextStatus[selected.status] === 'completed'
+                    ? t('completed')
+                    : nextStatus[selected.status]}
+                </button>
+                <button
+                  disabled={busy}
+                  className="button outline"
+                  onClick={() => transition(selected, 'cancelled')}
+                >
+                  {t('cancel')} {t('orders').toLowerCase()}
+                </button>
+              </div>
+            )}
         </>
       )}
     </Dialog>

@@ -11,6 +11,8 @@ export function OrderSummary({
   subtotal,
   canOrder,
   place,
+  method,
+  receiptFile,
 }: Pick<
   Controller,
   | 'checkout'
@@ -21,6 +23,8 @@ export function OrderSummary({
   | 'subtotal'
   | 'canOrder'
   | 'place'
+  | 'method'
+  | 'receiptFile'
 >) {
   return (
     <aside className="order-summary">
@@ -40,7 +44,16 @@ export function OrderSummary({
           <p>
             This total was calculated by Bareeq. Confirm to place your order.
           </p>
-          <button className="button light" disabled={busy} onClick={place}>
+          {method === 'instapay' && !receiptFile && (
+            <p>Upload your transfer receipt to place the order.</p>
+          )}
+          <button
+            className="button light"
+            disabled={
+              busy || !canOrder || (method === 'instapay' && !receiptFile)
+            }
+            onClick={place}
+          >
             {busy ? 'Placing order…' : 'Place order'}
           </button>
         </>

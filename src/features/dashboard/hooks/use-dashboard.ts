@@ -26,13 +26,25 @@ export function useDashboard(roleHint: boolean | null = null) {
   );
   const founder = roleHint ?? identity.data?.role === 'founder';
   const { orders, connection } = useOrders(!!allowed, identity.data?.user);
-  const { alert, setAlert } = useOrderAlerts({
+  const {
+    alert,
+    setAlert,
+    sound,
+    pushReady,
+    enabling,
+    notificationMessage,
+    enableAlerts,
+  } = useOrderAlerts({
     founder,
     allowed: !!allowed,
     orders,
     selected,
     setSelected,
+    userId: identity.data?.user,
   });
+  useEffect(() => {
+    setFilter(founder ? 'pending' : 'all');
+  }, [founder]);
   useEffect(() => {
     if (selected && orders.data)
       setSelected(orders.data.find((o) => o.id === selected.id) ?? null);
@@ -140,6 +152,11 @@ export function useDashboard(roleHint: boolean | null = null) {
     transition,
     permittedOrders,
     visible,
+    sound,
+    pushReady,
+    enabling,
+    notificationMessage,
+    enableAlerts,
   };
 }
 export type DashboardController = ReturnType<typeof useDashboard>;

@@ -10,7 +10,7 @@
     "build": "node scripts/build.mjs",
     "start": "node scripts/serve.mjs",
     "typecheck": "tsc --noEmit",
-    "test": "node --test tests/validation.test.mjs",
+    "test": "node --test tests/validation.test.mjs tests/checkout.test.mjs tests/notifications.test.mjs",
     "test:live": "node tests/http-smoke.mjs",
     "format": "prettier --write src scripts supabase tests README.md package.json tsconfig.json",
     "format:check": "prettier --check src scripts supabase tests README.md package.json tsconfig.json"

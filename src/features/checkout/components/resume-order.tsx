@@ -7,7 +7,11 @@ export function ResumeOrder({
   busy,
   run,
   submit,
-}: Pick<Controller, 'setOrder' | 'pending' | 'busy' | 'run' | 'submit'>) {
+  setConfirmationOpen,
+}: Pick<
+  Controller,
+  'setOrder' | 'pending' | 'busy' | 'run' | 'submit' | 'setConfirmationOpen'
+>) {
   return (
     <section className="checkout-panel">
       <h2>Resume your order</h2>
@@ -20,14 +24,14 @@ export function ResumeOrder({
         disabled={busy}
         onClick={() =>
           run(async () => {
-            if (pending.id)
-              setOrder(
-                await api('order', {
-                  id: pending.id,
-                  token: pending.token,
-                }),
-              );
-            else await submit(pending);
+            if (pending.id) {
+              const result = await api('order', {
+                id: pending.id,
+                token: pending.token,
+              });
+              setOrder(result);
+              setConfirmationOpen(result.status !== 'awaiting_receipt');
+            } else await submit(pending);
           })
         }
       >

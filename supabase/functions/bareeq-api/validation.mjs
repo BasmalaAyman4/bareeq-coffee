@@ -74,9 +74,20 @@ export function checkout(value) {
   )
     throw new Error('INVALID_PAYMENT_METHOD');
   if (value.table_id) uuid(value.table_id);
-  if (value.source === 'web') text(value.customer_name, 80, 1);
-  else text(value.customer_name ?? '', 80);
+  if (value.source === 'web') {
+    value.customer_name = text(value.customer_name, 80, 2);
+    if (!/\p{L}/u.test(value.customer_name))
+      throw new Error('INVALID_CUSTOMER_NAME');
+  } else text(value.customer_name ?? '', 80);
   text(value.phone ?? '', 30);
+  const mobile = (value.phone ?? '')
+    .replace(/[٠-٩]/g, (digit) => String(digit.charCodeAt(0) - 1632))
+    .replace(/[۰-۹]/g, (digit) => String(digit.charCodeAt(0) - 1776))
+    .replace(/[\s()-]/g, '')
+    .replace(/^(?:\+20|0020)/, '0');
+  if ((value.source === 'web' || mobile) && !/^01[0125]\d{8}$/.test(mobile))
+    throw new Error('INVALID_PHONE');
+  value.phone = mobile;
   text(value.notes ?? '', 500);
   if (
     value.quote_hash !== undefined &&

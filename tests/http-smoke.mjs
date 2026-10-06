@@ -23,6 +23,7 @@ const order = {
   source: 'web',
   fulfillment: 'takeaway',
   customer_name: 'AUTOMATED TEST',
+  phone: '01000000000',
   notes: 'Disposable integration test; no preparation or payment.',
   payment_method: 'cash',
   items: [

@@ -125,20 +125,22 @@ Set these Edge Function secrets for production:
 
 Founder **Settings** controls the InstaPay transfer details and receipt retention (3–30 days). InstaPay stays disabled until real transfer details are entered. The scheduled worker deletes expired receipt files while retaining order/payment/audit metadata. It also leaves a vendor-neutral integration outbox for a later POS or card-payment adapter.
 
-### Deploy Firebase Hosting
+### Deploy GitHub Pages
 
-`firebase.json` serves `dist` and rewrites all paths to `index.html`, including direct refreshes of `/dashboard`. The old `/founder` and `/cashier` links remain compatible.
+The active website is `https://basmalaayman4.github.io/bareeq-coffee/`. Pushing `main` runs `.github/workflows/deploy-pages.yml`, checks types and tests, builds for the `/bareeq-coffee/` base path, and publishes `dist` to GitHub Pages. `/dashboard`, `/founder`, and `/cashier` remain available under that base path.
 
 ```powershell
+$env:DEPLOY_TARGET='github-pages'
 npm run build
-firebase deploy --only hosting
 ```
 
-The existing production site is `https://bareeq-coffee.web.app/`. Firebase deploys the frontend only; Supabase migrations, functions, Storage, Auth, and scheduled jobs deploy separately.
+Supabase migrations, functions, Storage, Auth, and scheduled jobs deploy separately. The Firebase configuration is legacy and is not the current publishing path.
 
 ### Notifications and reports
 
-The Founder can add `/dashboard` to an iPhone Home Screen and choose **Enable notifications**. iOS web push requires the installed web app and a user-granted permission. If notifications, audio, or realtime fail, the authoritative queue reconnects and polls; orders are not lost.
+Staff can add `/dashboard` to an iPhone Home Screen, open that installed app, and tap **Enable notifications and sound**, then choose Allow. iOS 16.4 or later is required. The button also plays a test tone. Foreground audio is unlocked by interaction and resumed after suspension; background notification sound follows device and Focus settings. Subscription errors are visible and can be retried. The public push key is fetched from the authenticated backend, so frontend builds cannot silently lose push configuration. If notifications, audio, or realtime fail, the authoritative queue reconnects and polls; orders are not lost.
+
+Checkout validates customer names and Egyptian mobile numbers (including +20 and Arabic digits). InstaPay customers see the branch's saved receiving details and select a receipt before placing an order. The confirmation dialog opens only after the receipt is accepted, shows the order number and support number 01018652532, and explains that transfer verification is pending. Failed uploads preserve the same order for retry. Founder defaults to pending payment reviews and has receipt review and confirm/reject controls; order preparation remains in the Cashier workspace.
 
 Daily reports show completed-order sales/revenue, never profit, because no cost data is stored. CSV export uses immutable order snapshots. Receipts accept JPG, PNG, or WebP only, are limited to 2 MB, re-encoded by the server, and are private; Founder viewing uses a short signed URL.
 
@@ -153,4 +155,4 @@ npm run build
 
 `npm test` validates hostile client payloads. `tests/database.sql` is a rollback-only database suite covering authoritative pricing, price/availability races, role/RLS enforcement, verification concurrency, lifecycle controls, reports and receipt-history preservation. `npm run test:live` runs deployed API checks for quote, duplicate prevention, unauthorized access, receipt flow, and direct API denial. It creates disposable test orders, whose IDs are written to ignored `work/e2e-fixtures.json` for cleanup.
 
-Before launch, verify on `web.app`: Founder/Cashier first password change, Cash checkout to Cashier, InstaPay receipt → Founder confirm/reject → Cashier, direct-route refresh, staff audio, iPhone installed-app push, and queue recovery after reconnecting.
+Before launch, verify on GitHub Pages: Founder/Cashier first password change, Cash checkout to Cashier, InstaPay receipt → Founder confirm/reject → Cashier, direct-route refresh, staff audio, iPhone installed-app push, and queue recovery after reconnecting.

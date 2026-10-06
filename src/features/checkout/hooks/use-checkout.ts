@@ -2,6 +2,8 @@ import { useCart } from '@/features/cart/hooks/use-cart';
 import { useMenu, useProducts } from '@/features/catalog/hooks/use-menu';
 import { PENDING, secret } from '@/features/checkout/model';
 import { api } from '@/services/api';
+import { config } from '@/lib/supabase';
+import { customerError, normalizePhone, receiptError } from '../validation';
 import { useEffect, useRef, useState } from 'react';
 export function useCheckout({
   checkout = false,
@@ -25,7 +27,13 @@ export function useCheckout({
     [busy, setBusy] = useState(false),
     [error, setError] = useState('');
   const lock = useRef(false);
+  const [receiptFile, setReceiptFile] = useState<File | null>(null);
+  const [confirmationOpen, setConfirmationOpen] = useState(false);
   const selectedBranch = branch || menu.data?.branches[0]?.id || '';
+  const transferDetails =
+    menu.data?.branches
+      .find((b) => b.id === selectedBranch)
+      ?.instapay_details?.trim() ?? '';
   useEffect(() => {
     try {
       const saved = localStorage.getItem(PENDING);
@@ -69,9 +77,9 @@ export function useCheckout({
     branch_id: selectedBranch,
     source: staff ? 'cashier' : 'web',
     fulfillment,
-    customer_name: name,
-    phone,
-    notes,
+    customer_name: name.trim(),
+    phone: normalizePhone(phone),
+    notes: notes.trim(),
     payment_method: method,
     items: cart.map((l) => ({
       product_id: l.id,
@@ -114,9 +122,62 @@ export function useCheckout({
       localStorage.setItem(PENDING, JSON.stringify(next));
     } catch {}
     clear();
+    if (
+      result.payment_method === 'instapay' &&
+      result.status === 'awaiting_receipt'
+    ) {
+      await uploadReceipt(result, next);
+    } else setConfirmationOpen(true);
+  }
+  async function uploadReceipt(target?: any, saved = pending) {
+    target ??= await api('order', { id: order.id, token: saved.token });
+    if (target.status !== 'awaiting_receipt') {
+      setOrder(target);
+      setConfirmationOpen(true);
+      return;
+    }
+    const invalid = receiptError(receiptFile);
+    if (invalid) throw new Error(invalid);
+    const response = await fetch(config.url + '/functions/v1/bareeq-api', {
+      method: 'POST',
+      signal: AbortSignal.timeout(45000),
+      headers: {
+        apikey: config.key,
+        'Content-Type': receiptFile!.type,
+        'x-order-id': target.id,
+        'x-order-token': saved.token,
+      },
+      body: receiptFile,
+    });
+    const result = await response.json();
+    if (!response.ok)
+      throw new Error(
+        result.error ??
+          'Receipt upload failed. Retry below; do not transfer again.',
+      );
+    setOrder(result);
+    setReceiptFile(null);
+    setConfirmationOpen(true);
+  }
+  function dismissConfirmation() {
+    setConfirmationOpen(false);
+    localStorage.removeItem(PENDING);
+    setPending(null);
+    setOrder(null);
+    setQuote(null);
   }
   function place() {
-    run(async () => {
+    return run(async () => {
+      const invalid = customerError(name, phone, staff);
+      if (invalid) throw new Error(invalid);
+      if (!canOrder || !quote)
+        throw new Error('Review your current order total first.');
+      if (method === 'instapay') {
+        if (!transferDetails)
+          throw new Error('InstaPay is unavailable. Please choose cash.');
+        const invalidReceipt = receiptError(receiptFile);
+        if (invalidReceipt) throw new Error(invalidReceipt);
+      }
       const saved = {
         order: { ...payload(), quote_hash: quote.quote_hash },
         key: crypto.randomUUID(),
@@ -176,6 +237,13 @@ export function useCheckout({
     submit,
     place,
     hasReceipt,
+    receiptFile,
+    setReceiptFile,
+    transferDetails,
+    uploadReceipt,
+    confirmationOpen,
+    setConfirmationOpen,
+    dismissConfirmation,
   };
 }
 export type Controller = ReturnType<typeof useCheckout>;

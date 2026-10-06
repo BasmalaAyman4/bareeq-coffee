@@ -11,6 +11,7 @@ const order = () => ({
   source: 'web',
   fulfillment: 'takeaway',
   customer_name: 'Test',
+  phone: '01018652532',
   payment_method: 'cash',
   items: [
     { product_id: 'latte', quantity: 1, modifier_ids: [], variant_id: null },
@@ -18,6 +19,30 @@ const order = () => ({
 });
 test('valid identifier-only order is accepted', () =>
   assert.equal(checkout(order()).items.length, 1));
+for (const phone of [
+  '',
+  '123',
+  '0101234567',
+  '010123456789',
+  '01312345678',
+  'abcdefghijk',
+])
+  test('reject invalid customer mobile ' + JSON.stringify(phone), () =>
+    assert.throws(() => checkout({ ...order(), phone }), /INVALID_PHONE/),
+  );
+for (const phone of [
+  '+20 1018652532',
+  '00201018652532',
+  '٠١٠١٨٦٥٢٥٣٢',
+  '۰۱۰۱۸۶۵۲۵۳۲',
+])
+  test('normalize mobile ' + phone, () =>
+    assert.equal(checkout({ ...order(), phone }).phone, '01018652532'),
+  );
+for (const customer_name of [' ', 'A', '1234'])
+  test('reject invalid customer name ' + JSON.stringify(customer_name), () =>
+    assert.throws(() => checkout({ ...order(), customer_name })),
+  );
 test('cashier may create a walk-in cash or card order without customer details', () => {
   const counter = {
     ...order(),

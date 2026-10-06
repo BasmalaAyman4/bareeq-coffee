@@ -1,120 +1,78 @@
-import { Field } from '@/components/ui/field';
+import { Dialog } from '@/components/ui/modal';
 import { ImageUpload } from '@/components/ui/image-upload';
 import type { Controller } from '@/features/checkout/hooks/use-checkout';
-import { PENDING } from '@/features/checkout/model';
 import { money } from '@/lib/money';
-import { config } from '@/lib/supabase';
-import { api } from '@/services/api';
+
 export function OrderConfirmation({
-  menu,
-  quote,
-  setQuote,
   order,
-  setOrder,
-  pending,
-  setPending,
   busy,
+  receiptFile,
+  setReceiptFile,
+  setError,
   run,
-  hasReceipt,
-}: Pick<
-  Controller,
-  | 'menu'
-  | 'quote'
-  | 'setQuote'
-  | 'order'
-  | 'setOrder'
-  | 'pending'
-  | 'setPending'
-  | 'busy'
-  | 'run'
-  | 'hasReceipt'
->) {
+  uploadReceipt,
+  confirmationOpen,
+  dismissConfirmation,
+}: Controller) {
+  const needsReceipt = order.status === 'awaiting_receipt';
   return (
-    <section className="checkout-panel">
-      <p className="eyebrow">Order #{order.number}</p>
-      <h2>{money(order.total_minor)}</h2>
-      <p role="status">{order.status.replaceAll('_', ' ')}</p>
-      {order.payment_method === 'instapay' && (
-        <>
-          <p>Transfer exactly {money(order.total_minor)} to:</p>
-          <strong>
-            {order.instapay_details ??
-              quote?.instapay_details ??
-              menu.data?.branches.find((b) => b.id === order.branch_id)
-                ?.instapay_details ??
-              'InstaPay Account'}
-          </strong>
+    <>
+      {needsReceipt && (
+        <section className="checkout-panel">
+          <h2>Finish order #{order.number}</h2>
           <p>
-            The café will verify the incoming transfer. Uploading a screenshot
-            does not confirm payment.
+            Your order is saved. Upload the receipt to finish submitting it. Do
+            not transfer again.
           </p>
-          {!hasReceipt && (
-            <Field label="Receipt image" hint="JPG, PNG or WebP · maximum 2 MB">
-              <ImageUpload
-                disabled={busy}
-                title="Choose your receipt or drop it here"
-                hint="JPG, PNG or WebP · proof of transfer only"
-                onChange={(file) => {
-                  if (!file) return;
-                  run(async () => {
-                    if (file.size > 2097152)
-                      throw new Error('Receipt must be smaller than 2 MB.');
-                    const res = await fetch(
-                      config.url + '/functions/v1/bareeq-api',
-                      {
-                        method: 'POST',
-                        signal: AbortSignal.timeout(45000),
-                        headers: {
-                          apikey: config.key,
-                          'Content-Type': file.type,
-                          'x-order-id': order.id,
-                          'x-order-token': pending.token,
-                        },
-                        body: file,
-                      },
-                    );
-                    const value = await res.json();
-                    if (!res.ok) throw new Error(value.error);
-                    setOrder(value);
-                  });
-                }}
-              />
-            </Field>
-          )}
-        </>
+          <ImageUpload
+            file={receiptFile}
+            disabled={busy}
+            onChange={setReceiptFile}
+            onInvalid={setError}
+            title="Select your transfer receipt"
+          />
+          <button
+            className="button mt-4"
+            disabled={busy || !receiptFile}
+            onClick={() => run(() => uploadReceipt())}
+          >
+            {busy ? 'Uploading receipt…' : 'Submit receipt'}
+          </button>
+        </section>
       )}
-      <p>
-        Keep this page or return on this device to check the order. If the
-        connection fails, use Check status before starting another order.
-      </p>
-      <button
-        className="button outline"
-        disabled={busy}
-        onClick={() =>
-          run(async () =>
-            setOrder(
-              await api('order', { id: order.id, token: pending.token }),
-            ),
-          )
-        }
+      <Dialog
+        open={confirmationOpen}
+        title={`Thank you — order #${order.number}`}
+        onClose={dismissConfirmation}
       >
-        Check status
-      </button>
-      {!['awaiting_receipt', 'awaiting_payment_verification'].includes(
-        order.status,
-      ) && (
-        <button
-          className="text-link"
-          onClick={() => {
-            localStorage.removeItem(PENDING);
-            setPending(null);
-            setOrder(null);
-            setQuote(null);
-          }}
-        >
-          Start another order
+        <p className="eyebrow">Keep your order number</p>
+        <strong className="block text-4xl text-bareeq-burgundy">
+          #{order.number}
+        </strong>
+        <p>Total: {money(order.total_minor)}</p>
+        <p>
+          {order.status === 'payment_rejected'
+            ? 'We could not confirm your transfer. Please contact support with your order number before making another payment.'
+            : order.status === 'cancelled'
+              ? 'This order was cancelled. Contact support if you have already transferred payment.'
+              : order.payment_method === 'instapay' &&
+                  order.status !== 'awaiting_payment_verification'
+                ? 'Your payment has been confirmed and your order has been sent to the cashier.'
+                : order.payment_method === 'instapay'
+                  ? 'We received your receipt. The Founder will check the actual incoming transfer before confirming payment and sending your order to the cashier.'
+                  : 'Your order has been sent to the cashier. Please pay when collecting your order.'}
+        </p>
+        <p>
+          Need help or want to explain something about your order? Call{' '}
+          <a className="underline" href="tel:01018652532">
+            01018652532
+          </a>{' '}
+          and mention order #{order.number}.
+        </p>
+        <button className="button" onClick={dismissConfirmation}>
+          Done
         </button>
-      )}
-    </section>
+      </Dialog>
+    </>
   );
 }

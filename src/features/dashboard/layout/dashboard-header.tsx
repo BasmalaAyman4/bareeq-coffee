@@ -1,7 +1,22 @@
 import type { DashboardController } from '@/features/dashboard/hooks/use-dashboard';
 import { LanguageToggle } from '@/components/ui/language-toggle';
 import { useI18n } from '@/i18n/i18n-provider';
-export function DashboardHeader({ view }: Pick<DashboardController, 'view'>) {
+export function DashboardHeader({
+  view,
+  sound,
+  pushReady,
+  enabling,
+  notificationMessage,
+  enableAlerts,
+}: Pick<
+  DashboardController,
+  | 'view'
+  | 'sound'
+  | 'pushReady'
+  | 'enabling'
+  | 'notificationMessage'
+  | 'enableAlerts'
+>) {
   const { t } = useI18n();
   return (
     <header className="staff-header !mb-7 !rounded-3xl !border !border-bareeq-espresso/10 !bg-bareeq-ivory !p-6 !shadow-sm">
@@ -25,6 +40,22 @@ export function DashboardHeader({ view }: Pick<DashboardController, 'view'>) {
           <span className="relative inline-flex size-2 rounded-full bg-emerald-500" />
         </span>
         {t('liveAlerts')}
+      </div>
+      <div className="max-w-sm text-sm">
+        <button className="button" disabled={enabling} onClick={enableAlerts}>
+          {enabling
+            ? 'Enabling…'
+            : pushReady
+              ? 'Test sound / reconnect alerts'
+              : 'Enable notifications and sound'}
+        </button>
+        <p role="status" className="mt-2 text-xs">
+          {notificationMessage}
+        </p>
+        <p className="text-xs">
+          Sound: {sound ? 'ready' : 'tap to enable'} · Push:{' '}
+          {pushReady ? 'connected' : 'not connected'}
+        </p>
       </div>
       <LanguageToggle />
     </header>
