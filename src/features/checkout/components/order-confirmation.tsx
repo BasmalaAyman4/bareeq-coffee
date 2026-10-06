@@ -41,7 +41,8 @@ export function OrderConfirmation({
             {order.instapay_details ??
               quote?.instapay_details ??
               menu.data?.branches.find((b) => b.id === order.branch_id)
-                ?.instapay_details}
+                ?.instapay_details ??
+              'InstaPay Account'}
           </strong>
           <p>
             The café will verify the incoming transfer. Uploading a screenshot

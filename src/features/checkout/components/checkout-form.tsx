@@ -77,39 +77,35 @@ export function CheckoutForm({
             onChange={(e) => setPhone(e.target.value)}
           />
         </Field>
-        <Field label="Branch">
-          <Select
-            value={selectedBranch}
-            onChange={(e) => setBranch(e.target.value)}
-          >
-            {menu.data?.branches.map((b) => (
-              <option value={b.id} key={b.id}>
-                {b.name}
-              </option>
-            ))}
-          </Select>
-        </Field>
-        <Field label="Fulfillment">
-          <Select
-            value={fulfillment}
-            onChange={(e) => setFulfillment(e.target.value)}
-          >
-            <option value="takeaway">Takeaway / collection</option>
-            <option value="dine_in">Dine-in</option>
-          </Select>
-        </Field>
+        {staff && (
+          <>
+            <Field label="Branch">
+              <Select
+                value={selectedBranch}
+                onChange={(e) => setBranch(e.target.value)}
+              >
+                {menu.data?.branches.map((b) => (
+                  <option value={b.id} key={b.id}>
+                    {b.name}
+                  </option>
+                ))}
+              </Select>
+            </Field>
+            <Field label="Fulfillment">
+              <Select
+                value={fulfillment}
+                onChange={(e) => setFulfillment(e.target.value)}
+              >
+                <option value="takeaway">Takeaway / collection</option>
+                <option value="dine_in">Dine-in</option>
+              </Select>
+            </Field>
+          </>
+        )}
         <Field label="Payment">
           <Select value={method} onChange={(e) => setMethod(e.target.value)}>
             <option value="cash">Cash</option>
-            <option
-              value="instapay"
-              disabled={
-                !menu.data?.branches.find((b) => b.id === selectedBranch)
-                  ?.instapay_details
-              }
-            >
-              InstaPay
-            </option>
+            <option value="instapay">InstaPay</option>
           </Select>
         </Field>
         <Field label="Notes" hint="Optional: a preference or collection note.">
