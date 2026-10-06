@@ -1,18 +1,10 @@
-import React, { createContext, useContext, useSyncExternalStore } from 'react';
+import React, { createContext, useContext, useEffect, useState } from 'react';
 export const ServerPath = createContext('/');
 const basePath = () =>
   typeof window !== 'undefined' &&
   window.location.pathname.startsWith('/bareeq-coffee')
     ? '/bareeq-coffee'
     : '';
-const subscribe = (fn: () => void) => {
-  window.addEventListener('popstate', fn);
-  window.addEventListener('hashchange', fn);
-  return () => {
-    window.removeEventListener('popstate', fn);
-    window.removeEventListener('hashchange', fn);
-  };
-};
 export function usePathname() {
   const initial = useContext(ServerPath);
   const clientPath = () => {
@@ -23,7 +15,18 @@ export function usePathname() {
         : window.location.pathname.replace(basePath(), '')) || '/'
     );
   };
-  return useSyncExternalStore(subscribe, clientPath, () => initial);
+  const [path, setPath] = useState(initial);
+  useEffect(() => {
+    const update = () => setPath(clientPath());
+    update();
+    window.addEventListener('popstate', update);
+    window.addEventListener('hashchange', update);
+    return () => {
+      window.removeEventListener('popstate', update);
+      window.removeEventListener('hashchange', update);
+    };
+  }, []);
+  return path;
 }
 export default function Link({
   href,
