@@ -153,6 +153,16 @@ fs.writeFileSync(
   'dist/404.html',
   createDocument('Page not found', render('/404')),
 );
+// GitHub Pages can serve the custom 404 document for a deep staff URL before
+// looking up a nested index file. Keep a deterministic fallback for those
+// three protected entrypoints.
+const staffFallback = `<script>(function(){var p=location.pathname.replace(/\\/$/,'');var m={'/bareeq-coffee/dashboard':'/bareeq-coffee/dashboard/index.html','/bareeq-coffee/founder':'/bareeq-coffee/founder/index.html','/bareeq-coffee/cashier':'/bareeq-coffee/cashier/index.html'};if(m[p])location.replace(m[p]);})();</script>`;
+fs.writeFileSync(
+  'dist/404.html',
+  fs
+    .readFileSync('dist/404.html', 'utf8')
+    .replace('</head>', staffFallback + '</head>'),
+);
 // GitHub Pages project sites are served below /bareeq-coffee. Rewrite
 // document and manifest asset URLs for that deployment target.
 if (process.env.DEPLOY_TARGET === 'github-pages') {
