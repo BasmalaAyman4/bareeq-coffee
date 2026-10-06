@@ -156,7 +156,7 @@ fs.writeFileSync(
 // GitHub Pages can serve the custom 404 document for a deep staff URL before
 // looking up a nested index file. Keep a deterministic fallback for those
 // three protected entrypoints.
-const staffFallback = `<script>(function(){var p=location.pathname.replace(/\\/$/,'');var m={'/bareeq-coffee/dashboard':'/bareeq-coffee/dashboard/index.html','/bareeq-coffee/founder':'/bareeq-coffee/founder/index.html','/bareeq-coffee/cashier':'/bareeq-coffee/cashier/index.html'};if(m[p])location.replace(m[p]);})();</script>`;
+const staffFallback = `<script>(function(){var p=location.pathname.replace(/\\/$/,'');var m={'/bareeq-coffee/dashboard':'/bareeq-coffee/dashboard/index.html','/bareeq-coffee/dashboard/index.html':'/bareeq-coffee/dashboard/index.html','/bareeq-coffee/founder':'/bareeq-coffee/founder/index.html','/bareeq-coffee/founder/index.html':'/bareeq-coffee/founder/index.html','/bareeq-coffee/cashier':'/bareeq-coffee/cashier/index.html','/bareeq-coffee/cashier/index.html':'/bareeq-coffee/cashier/index.html'};if(m[p]&&p!==m[p])location.replace(m[p]);})();</script>`;
 fs.writeFileSync(
   'dist/404.html',
   fs
