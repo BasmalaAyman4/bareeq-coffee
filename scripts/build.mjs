@@ -179,20 +179,22 @@ if (process.env.DEPLOY_TARGET === 'github-pages') {
       const file = path.join(directory, entry.name);
       if (entry.isDirectory()) walk(file);
       else if (/\.(html|js|css|webmanifest)$/.test(entry.name)) {
-        const source = fs.readFileSync(file, 'utf8');
-        fs.writeFileSync(
-          file,
-          source
+        let source = fs.readFileSync(file, 'utf8');
+        if (entry.name.endsWith('.html')) {
+          source = source
             .replaceAll('href="/', 'href="/bareeq-coffee/')
             .replaceAll('src="/', 'src="/bareeq-coffee/')
-            .replaceAll('url(/assets/', 'url(/bareeq-coffee/assets/')
-            .replaceAll("'/assets/", "'/bareeq-coffee/assets/")
-            .replaceAll('"/assets/', '"/bareeq-coffee/assets/')
-            .replace(/(?<!bareeq-coffee)\/assets\//g, '/bareeq-coffee/assets/')
-            .replaceAll('"/founder', '"/bareeq-coffee/founder')
-            .replaceAll('"/dashboard', '"/bareeq-coffee/dashboard')
-            .replaceAll('"scope":"/"', '"scope":"/bareeq-coffee/"'),
-        );
+            .replaceAll('"/founder"', '"/bareeq-coffee/founder"')
+            .replaceAll('"/dashboard"', '"/bareeq-coffee/dashboard"')
+            .replaceAll('"/cashier"', '"/bareeq-coffee/cashier"');
+        }
+        source = source
+          .replaceAll('url(/assets/', 'url(/bareeq-coffee/assets/')
+          .replaceAll("'/assets/", "'/bareeq-coffee/assets/")
+          .replaceAll('"/assets/', '"/bareeq-coffee/assets/')
+          .replace(/(?<!bareeq-coffee)\/assets\//g, '/bareeq-coffee/assets/')
+          .replaceAll('"scope":"/"', '"scope":"/bareeq-coffee/"');
+        fs.writeFileSync(file, source);
       }
     }
   };
