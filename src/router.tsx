@@ -7,15 +7,23 @@ const basePath = () =>
     : '';
 const subscribe = (fn: () => void) => {
   window.addEventListener('popstate', fn);
-  return () => window.removeEventListener('popstate', fn);
+  window.addEventListener('hashchange', fn);
+  return () => {
+    window.removeEventListener('popstate', fn);
+    window.removeEventListener('hashchange', fn);
+  };
 };
 export function usePathname() {
   const initial = useContext(ServerPath);
-  return useSyncExternalStore(
-    subscribe,
-    () => window.location.pathname.replace(basePath(), '') || '/',
-    () => initial,
-  );
+  const clientPath = () => {
+    const hash = window.location.hash.replace(/^#/, '');
+    return (
+      (hash.startsWith('/')
+        ? hash
+        : window.location.pathname.replace(basePath(), '')) || '/'
+    );
+  };
+  return useSyncExternalStore(subscribe, clientPath, () => initial);
 }
 export default function Link({
   href,
@@ -23,9 +31,15 @@ export default function Link({
   children,
   ...rest
 }: React.AnchorHTMLAttributes<HTMLAnchorElement> & { href: string }) {
+  const useHash =
+    typeof window !== 'undefined' && window.location.hash.startsWith('#/');
   return (
     <a
-      href={basePath() + href}
+      href={
+        useHash && href.startsWith('/')
+          ? `${basePath()}/#${href}`
+          : basePath() + href
+      }
       {...rest}
       onClick={(e) => {
         onClick?.(e);
@@ -41,6 +55,10 @@ export default function Link({
         )
           return;
         e.preventDefault();
+        if (useHash) {
+          window.location.hash = href;
+          return;
+        }
         history.pushState({}, '', basePath() + href);
         window.dispatchEvent(new PopStateEvent('popstate'));
         window.scrollTo(0, 0);
