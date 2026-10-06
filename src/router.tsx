@@ -1,7 +1,8 @@
 import React, { createContext, useContext, useSyncExternalStore } from 'react';
 export const ServerPath = createContext('/');
 const basePath = () =>
-  typeof window !== 'undefined' && window.location.pathname.startsWith('/bareeq-coffee')
+  typeof window !== 'undefined' &&
+  window.location.pathname.startsWith('/bareeq-coffee')
     ? '/bareeq-coffee'
     : '';
 const subscribe = (fn: () => void) => {

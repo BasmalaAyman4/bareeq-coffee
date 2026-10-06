@@ -1,0 +1,602 @@
+[
+  {
+    "source": "images/Bakery/American Donut.png",
+    "category": "Bakery",
+    "file": "assets/products/bakery-american-donut.jpg",
+    "name": "American Donut"
+  },
+  {
+    "source": "images/Bakery/Butter Croissant.png",
+    "category": "Bakery",
+    "file": "assets/products/bakery-butter-croissant.jpg",
+    "name": "Butter Croissant"
+  },
+  {
+    "source": "images/Bakery/Cinnamon Roll.png",
+    "category": "Bakery",
+    "file": "assets/products/bakery-cinnamon-roll.jpg",
+    "name": "Cinnamon Roll"
+  },
+  {
+    "source": "images/Bakery/Nutella Croissant.png",
+    "category": "Bakery",
+    "file": "assets/products/bakery-nutella-croissant.jpg",
+    "name": "Nutella Croissant"
+  },
+  {
+    "source": "images/Bakery/Pistachio Croissant.png",
+    "category": "Bakery",
+    "file": "assets/products/bakery-pistachio-croissant.jpg",
+    "name": "Pistachio Croissant"
+  },
+  {
+    "source": "images/Bakery/Sandwich.png",
+    "category": "Bakery",
+    "file": "assets/products/bakery-sandwich.jpg",
+    "name": "Sandwich"
+  },
+  {
+    "source": "images/Bakery/Tuna Melt Sandwich.png",
+    "category": "Bakery",
+    "file": "assets/products/bakery-tuna-melt-sandwich.jpg",
+    "name": "Tuna Melt Sandwich"
+  },
+  {
+    "source": "images/Bakery/Turkish Cheese Croissant.png",
+    "category": "Bakery",
+    "file": "assets/products/bakery-turkish-cheese-croissant.jpg",
+    "name": "Turkish Cheese Croissant"
+  },
+  {
+    "source": "images/Blended/Blueberry Blend.png",
+    "category": "Blended",
+    "file": "assets/products/blended-blueberry-blend.jpg",
+    "name": "Blueberry Blend"
+  },
+  {
+    "source": "images/Blended/Caramel Mix.png",
+    "category": "Blended",
+    "file": "assets/products/blended-caramel-mix.jpg",
+    "name": "Caramel Mix"
+  },
+  {
+    "source": "images/Blended/Latte Mix.png",
+    "category": "Blended",
+    "file": "assets/products/blended-latte-mix.jpg",
+    "name": "Latte Mix"
+  },
+  {
+    "source": "images/Blended/Mocha Mix.png",
+    "category": "Blended",
+    "file": "assets/products/blended-mocha-mix.jpg",
+    "name": "Mocha Mix"
+  },
+  {
+    "source": "images/Blended/Oreo Nutella Cream.png",
+    "category": "Blended",
+    "file": "assets/products/blended-oreo-nutella-cream.jpg",
+    "name": "Oreo Nutella Cream"
+  },
+  {
+    "source": "images/Blended/Peanut Butter Blend (New).png",
+    "category": "Blended",
+    "file": "assets/products/blended-peanut-butter-blend-new.jpg",
+    "name": "Peanut Butter Blend (New)"
+  },
+  {
+    "source": "images/Blended/Pistachio Cream Mix.png",
+    "category": "Blended",
+    "file": "assets/products/blended-pistachio-cream-mix.jpg",
+    "name": "Pistachio Cream Mix"
+  },
+  {
+    "source": "images/Blended/Salted Caramel Blend.png",
+    "category": "Blended",
+    "file": "assets/products/blended-salted-caramel-blend.jpg",
+    "name": "Salted Caramel Blend"
+  },
+  {
+    "source": "images/Blended/Spanish Mix.png",
+    "category": "Blended",
+    "file": "assets/products/blended-spanish-mix.jpg",
+    "name": "Spanish Mix"
+  },
+  {
+    "source": "images/Blended/Strawberry and Vanilla Cream.png",
+    "category": "Blended",
+    "file": "assets/products/blended-strawberry-and-vanilla-cream.jpg",
+    "name": "Strawberry and Vanilla Cream"
+  },
+  {
+    "source": "images/Blended/White Mocha Mix.png",
+    "category": "Blended",
+    "file": "assets/products/blended-white-mocha-mix.jpg",
+    "name": "White Mocha Mix"
+  },
+  {
+    "source": "images/Brewing/Aeropress.png",
+    "category": "Brewing",
+    "file": "assets/products/brewing-aeropress.jpg",
+    "name": "Aeropress"
+  },
+  {
+    "source": "images/Brewing/V60 Coffee.png",
+    "category": "Brewing",
+    "file": "assets/products/brewing-v60-coffee.jpg",
+    "name": "V60 Coffee"
+  },
+  {
+    "source": "images/Coffee/Americano.png",
+    "category": "Coffee",
+    "file": "assets/products/coffee-americano.jpg",
+    "name": "Americano"
+  },
+  {
+    "source": "images/Coffee/Cappuccino.png",
+    "category": "Coffee",
+    "file": "assets/products/coffee-cappuccino.jpg",
+    "name": "Cappuccino"
+  },
+  {
+    "source": "images/Coffee/Caramel Cinnamon Latte (New).png",
+    "category": "Coffee",
+    "file": "assets/products/coffee-caramel-cinnamon-latte-new.jpg",
+    "name": "Caramel Cinnamon Latte (New)"
+  },
+  {
+    "source": "images/Coffee/Cortado.png",
+    "category": "Coffee",
+    "file": "assets/products/coffee-cortado.jpg",
+    "name": "Cortado"
+  },
+  {
+    "source": "images/Coffee/Espresso.png",
+    "category": "Coffee",
+    "file": "assets/products/coffee-espresso.jpg",
+    "name": "Espresso"
+  },
+  {
+    "source": "images/Coffee/Flat White.png",
+    "category": "Coffee",
+    "file": "assets/products/coffee-flat-white.jpg",
+    "name": "Flat White"
+  },
+  {
+    "source": "images/Coffee/Hot Caramel Macchiato.png",
+    "category": "Coffee",
+    "file": "assets/products/coffee-hot-caramel-macchiato.jpg",
+    "name": "Hot Caramel Macchiato"
+  },
+  {
+    "source": "images/Coffee/Latte.png",
+    "category": "Coffee",
+    "file": "assets/products/coffee-latte.jpg",
+    "name": "Latte"
+  },
+  {
+    "source": "images/Coffee/Macchiato.png",
+    "category": "Coffee",
+    "file": "assets/products/coffee-macchiato.jpg",
+    "name": "Macchiato"
+  },
+  {
+    "source": "images/Coffee/Medjool Date Latte.png",
+    "category": "Coffee",
+    "file": "assets/products/coffee-medjool-date-latte.jpg",
+    "name": "Medjool Date Latte"
+  },
+  {
+    "source": "images/Coffee/Mocha.png",
+    "category": "Coffee",
+    "file": "assets/products/coffee-mocha.jpg",
+    "name": "Mocha"
+  },
+  {
+    "source": "images/Coffee/Pistachio Latte.png",
+    "category": "Coffee",
+    "file": "assets/products/coffee-pistachio-latte.jpg",
+    "name": "Pistachio Latte"
+  },
+  {
+    "source": "images/Coffee/Salted Caramel Latte.png",
+    "category": "Coffee",
+    "file": "assets/products/coffee-salted-caramel-latte.jpg",
+    "name": "Salted Caramel Latte"
+  },
+  {
+    "source": "images/Coffee/Spanish Latte.png",
+    "category": "Coffee",
+    "file": "assets/products/coffee-spanish-latte.jpg",
+    "name": "Spanish Latte"
+  },
+  {
+    "source": "images/Coffee/Spiced Vanilla Latte (New).png",
+    "category": "Coffee",
+    "file": "assets/products/coffee-spiced-vanilla-latte-new.jpg",
+    "name": "Spiced Vanilla Latte (New)"
+  },
+  {
+    "source": "images/Coffee/White Mocha.png",
+    "category": "Coffee",
+    "file": "assets/products/coffee-white-mocha.jpg",
+    "name": "White Mocha"
+  },
+  {
+    "source": "images/Coffee Beans/Brazilian Coffee.png",
+    "category": "Coffee Beans",
+    "file": "assets/products/coffee-beans-brazilian-coffee.jpg",
+    "name": "Brazilian Coffee"
+  },
+  {
+    "source": "images/Coffee Beans/Ethiopian Coffee.png",
+    "category": "Coffee Beans",
+    "file": "assets/products/coffee-beans-ethiopian-coffee.jpg",
+    "name": "Ethiopian Coffee"
+  },
+  {
+    "source": "images/Coffee Beans/Milky Way Blend.png",
+    "category": "Coffee Beans",
+    "file": "assets/products/coffee-beans-milky-way-blend.jpg",
+    "name": "Milky Way Blend"
+  },
+  {
+    "source": "images/Coffee Beans/Turkish Coffee.png",
+    "category": "Coffee Beans",
+    "file": "assets/products/coffee-beans-turkish-coffee.jpg",
+    "name": "Turkish Coffee"
+  },
+  {
+    "source": "images/Cold Drink/Iced Americano.png",
+    "category": "Cold Drink",
+    "file": "assets/products/cold-drink-iced-americano.jpg",
+    "name": "Iced Americano"
+  },
+  {
+    "source": "images/Cold Drink/Iced Caramel Macchiato.png",
+    "category": "Cold Drink",
+    "file": "assets/products/cold-drink-iced-caramel-macchiato.jpg",
+    "name": "Iced Caramel Macchiato"
+  },
+  {
+    "source": "images/Cold Drink/Iced Latte.png",
+    "category": "Cold Drink",
+    "file": "assets/products/cold-drink-iced-latte.jpg",
+    "name": "Iced Latte"
+  },
+  {
+    "source": "images/Cold Drink/Iced Mocha.png",
+    "category": "Cold Drink",
+    "file": "assets/products/cold-drink-iced-mocha.jpg",
+    "name": "Iced Mocha"
+  },
+  {
+    "source": "images/Cold Drink/Iced Pistachio Latte.png",
+    "category": "Cold Drink",
+    "file": "assets/products/cold-drink-iced-pistachio-latte.jpg",
+    "name": "Iced Pistachio Latte"
+  },
+  {
+    "source": "images/Cold Drink/Iced Salted Caramel Latte.png",
+    "category": "Cold Drink",
+    "file": "assets/products/cold-drink-iced-salted-caramel-latte.jpg",
+    "name": "Iced Salted Caramel Latte"
+  },
+  {
+    "source": "images/Cold Drink/Iced Spanish Latte.png",
+    "category": "Cold Drink",
+    "file": "assets/products/cold-drink-iced-spanish-latte.jpg",
+    "name": "Iced Spanish Latte"
+  },
+  {
+    "source": "images/Cold Drink/Shaken Iced White Mocha.png",
+    "category": "Cold Drink",
+    "file": "assets/products/cold-drink-shaken-iced-white-mocha.jpg",
+    "name": "Shaken Iced White Mocha"
+  },
+  {
+    "source": "images/Cookies/Kinder Cookies.png",
+    "category": "Cookies",
+    "file": "assets/products/cookies-kinder-cookies.jpg",
+    "name": "Kinder Cookies"
+  },
+  {
+    "source": "images/Cookies/Nutella Cookies.png",
+    "category": "Cookies",
+    "file": "assets/products/cookies-nutella-cookies.jpg",
+    "name": "Nutella Cookies"
+  },
+  {
+    "source": "images/Cookies/Original Cookies.png",
+    "category": "Cookies",
+    "file": "assets/products/cookies-original-cookies.jpg",
+    "name": "Original Cookies"
+  },
+  {
+    "source": "images/Dessert Bareeq/Chocolate and Walnut Cake.png",
+    "category": "Dessert Bareeq",
+    "file": "assets/products/dessert-bareeq-chocolate-and-walnut-cake.jpg",
+    "name": "Chocolate and Walnut Cake"
+  },
+  {
+    "source": "images/Dessert Bareeq/Classic Cheesecake.png",
+    "category": "Dessert Bareeq",
+    "file": "assets/products/dessert-bareeq-classic-cheesecake.jpg",
+    "name": "Classic Cheesecake"
+  },
+  {
+    "source": "images/Dessert Bareeq/Italian Tiramisu.png",
+    "category": "Dessert Bareeq",
+    "file": "assets/products/dessert-bareeq-italian-tiramisu.jpg",
+    "name": "Italian Tiramisu"
+  },
+  {
+    "source": "images/Dessert Bareeq/Red Velvet Cake.png",
+    "category": "Dessert Bareeq",
+    "file": "assets/products/dessert-bareeq-red-velvet-cake.jpg",
+    "name": "Red Velvet Cake"
+  },
+  {
+    "source": "images/Dessert Bareeq/Russian Honey Cake.png",
+    "category": "Dessert Bareeq",
+    "file": "assets/products/dessert-bareeq-russian-honey-cake.jpg",
+    "name": "Russian Honey Cake"
+  },
+  {
+    "source": "images/Dessert Bareeq/San Sebastian Cheesecake.png",
+    "category": "Dessert Bareeq",
+    "file": "assets/products/dessert-bareeq-san-sebastian-cheesecake.jpg",
+    "name": "San Sebastian Cheesecake"
+  },
+  {
+    "source": "images/Extras/Blueberry.png",
+    "category": "Extras",
+    "file": "assets/products/extras-blueberry.jpg",
+    "name": "Blueberry"
+  },
+  {
+    "source": "images/Extras/Caramel.png",
+    "category": "Extras",
+    "file": "assets/products/extras-caramel.jpg",
+    "name": "Caramel"
+  },
+  {
+    "source": "images/Extras/Coconut Milk.png",
+    "category": "Extras",
+    "file": "assets/products/extras-coconut-milk.jpg",
+    "name": "Coconut Milk"
+  },
+  {
+    "source": "images/Extras/Hazelnut.png",
+    "category": "Extras",
+    "file": "assets/products/extras-hazelnut.jpg",
+    "name": "Hazelnut"
+  },
+  {
+    "source": "images/Extras/Nutella.png",
+    "category": "Extras",
+    "file": "assets/products/extras-nutella.jpg",
+    "name": "Nutella"
+  },
+  {
+    "source": "images/Extras/Oat milk.png",
+    "category": "Extras",
+    "file": "assets/products/extras-oat-milk.jpg",
+    "name": "Oat milk"
+  },
+  {
+    "source": "images/Extras/Pistachio.png",
+    "category": "Extras",
+    "file": "assets/products/extras-pistachio.jpg",
+    "name": "Pistachio"
+  },
+  {
+    "source": "images/Extras/Strawberry.png",
+    "category": "Extras",
+    "file": "assets/products/extras-strawberry.jpg",
+    "name": "Strawberry"
+  },
+  {
+    "source": "images/Extras/Whipped Cream.png",
+    "category": "Extras",
+    "file": "assets/products/extras-whipped-cream.jpg",
+    "name": "Whipped Cream"
+  },
+  {
+    "source": "images/Juice and Smoothie/Blueberry Smoothie.png",
+    "category": "Juice and Smoothie",
+    "file": "assets/products/juice-and-smoothie-blueberry-smoothie.jpg",
+    "name": "Blueberry Smoothie"
+  },
+  {
+    "source": "images/Juice and Smoothie/Fresh Orange Juice (New).png",
+    "category": "Juice and Smoothie",
+    "file": "assets/products/juice-and-smoothie-fresh-orange-juice-new.jpg",
+    "name": "Fresh Orange Juice (New)"
+  },
+  {
+    "source": "images/Juice and Smoothie/Mango Smoothie.png",
+    "category": "Juice and Smoothie",
+    "file": "assets/products/juice-and-smoothie-mango-smoothie.jpg",
+    "name": "Mango Smoothie"
+  },
+  {
+    "source": "images/Juice and Smoothie/Mango.png",
+    "category": "Juice and Smoothie",
+    "file": "assets/products/juice-and-smoothie-mango.jpg",
+    "name": "Mango"
+  },
+  {
+    "source": "images/Juice and Smoothie/Mint Lemonade.png",
+    "category": "Juice and Smoothie",
+    "file": "assets/products/juice-and-smoothie-mint-lemonade.jpg",
+    "name": "Mint Lemonade"
+  },
+  {
+    "source": "images/Juice and Smoothie/Passion Fruit Smoothie.png",
+    "category": "Juice and Smoothie",
+    "file": "assets/products/juice-and-smoothie-passion-fruit-smoothie.jpg",
+    "name": "Passion Fruit Smoothie"
+  },
+  {
+    "source": "images/Matcha/Creamy Japanese Strawberry Matcha (New).png",
+    "category": "Matcha",
+    "file": "assets/products/matcha-creamy-japanese-strawberry-matcha-new.jpg",
+    "name": "Creamy Japanese Strawberry Matcha (New)"
+  },
+  {
+    "source": "images/Matcha/Hot Spanish Matcha.png",
+    "category": "Matcha",
+    "file": "assets/products/matcha-hot-spanish-matcha.jpg",
+    "name": "Hot Spanish Matcha"
+  },
+  {
+    "source": "images/Matcha/Iced Japanese White Chocolate Matcha.png",
+    "category": "Matcha",
+    "file": "assets/products/matcha-iced-japanese-white-chocolate-matcha.jpg",
+    "name": "Iced Japanese White Chocolate Matcha"
+  },
+  {
+    "source": "images/Matcha/Japanese Blueberry Matcha Cream (New).png",
+    "category": "Matcha",
+    "file": "assets/products/matcha-japanese-blueberry-matcha-cream-new.jpg",
+    "name": "Japanese Blueberry Matcha Cream (New)"
+  },
+  {
+    "source": "images/Matcha/Japanese Matcha Cream (New).png",
+    "category": "Matcha",
+    "file": "assets/products/matcha-japanese-matcha-cream-new.jpg",
+    "name": "Japanese Matcha Cream (New)"
+  },
+  {
+    "source": "images/Matcha/Japanese Matcha Latte.png",
+    "category": "Matcha",
+    "file": "assets/products/matcha-japanese-matcha-latte.jpg",
+    "name": "Japanese Matcha Latte"
+  },
+  {
+    "source": "images/Matcha/Japanese White Chocolate Matcha Blend.png",
+    "category": "Matcha",
+    "file": "assets/products/matcha-japanese-white-chocolate-matcha-blend.jpg",
+    "name": "Japanese White Chocolate Matcha Blend"
+  },
+  {
+    "source": "images/Matcha/Salted Caramel Matcha (New).png",
+    "category": "Matcha",
+    "file": "assets/products/matcha-salted-caramel-matcha-new.jpg",
+    "name": "Salted Caramel Matcha (New)"
+  },
+  {
+    "source": "images/Matcha/Spanish Japanese Matcha Cream.png",
+    "category": "Matcha",
+    "file": "assets/products/matcha-spanish-japanese-matcha-cream.jpg",
+    "name": "Spanish Japanese Matcha Cream"
+  },
+  {
+    "source": "images/Refreshers/Blue Sunshine Lemonade.png",
+    "category": "Refreshers",
+    "file": "assets/products/refreshers-blue-sunshine-lemonade.jpg",
+    "name": "Blue Sunshine Lemonade"
+  },
+  {
+    "source": "images/Refreshers/Blueberry Sunshine.png",
+    "category": "Refreshers",
+    "file": "assets/products/refreshers-blueberry-sunshine.jpg",
+    "name": "Blueberry Sunshine"
+  },
+  {
+    "source": "images/Refreshers/Iced Peach Tea.png",
+    "category": "Refreshers",
+    "file": "assets/products/refreshers-iced-peach-tea.jpg",
+    "name": "Iced Peach Tea"
+  },
+  {
+    "source": "images/Refreshers/Lemon Passion Fruit.png",
+    "category": "Refreshers",
+    "file": "assets/products/refreshers-lemon-passion-fruit.jpg",
+    "name": "Lemon Passion Fruit"
+  },
+  {
+    "source": "images/Refreshers/Peach Sunshine.png",
+    "category": "Refreshers",
+    "file": "assets/products/refreshers-peach-sunshine.jpg",
+    "name": "Peach Sunshine"
+  },
+  {
+    "source": "images/Refreshers/Red Bull (New).png",
+    "category": "Refreshers",
+    "file": "assets/products/refreshers-red-bull-new.jpg",
+    "name": "Red Bull (New)"
+  },
+  {
+    "source": "images/Refreshers/Red Bull Sunshine (New).png",
+    "category": "Refreshers",
+    "file": "assets/products/refreshers-red-bull-sunshine-new.jpg",
+    "name": "Red Bull Sunshine (New)"
+  },
+  {
+    "source": "images/Refreshers/Sparkling Water (New).png",
+    "category": "Refreshers",
+    "file": "assets/products/refreshers-sparkling-water-new.jpg",
+    "name": "Sparkling Water (New)"
+  },
+  {
+    "source": "images/Refreshers/Strawberry Sunshine.png",
+    "category": "Refreshers",
+    "file": "assets/products/refreshers-strawberry-sunshine.jpg",
+    "name": "Strawberry Sunshine"
+  },
+  {
+    "source": "images/Refreshers/Sunshine Lemon Mint.png",
+    "category": "Refreshers",
+    "file": "assets/products/refreshers-sunshine-lemon-mint.jpg",
+    "name": "Sunshine Lemon Mint"
+  },
+  {
+    "source": "images/Refreshers/Sunshine Passion Fruit.png",
+    "category": "Refreshers",
+    "file": "assets/products/refreshers-sunshine-passion-fruit.jpg",
+    "name": "Sunshine Passion Fruit"
+  },
+  {
+    "source": "images/Refreshers/Water.png",
+    "category": "Refreshers",
+    "file": "assets/products/refreshers-water.jpg",
+    "name": "Water"
+  },
+  {
+    "source": "images/Signature Drinks/Grape Greek.png",
+    "category": "Signature Drinks",
+    "file": "assets/products/signature-drinks-grape-greek.jpg",
+    "name": "Grape Greek"
+  },
+  {
+    "source": "images/Signature Drinks/Iced Chocolate with Fruits.png",
+    "category": "Signature Drinks",
+    "file": "assets/products/signature-drinks-iced-chocolate-with-fruits.jpg",
+    "name": "Iced Chocolate with Fruits"
+  },
+  {
+    "source": "images/Signature Drinks/Pink Lemonade.png",
+    "category": "Signature Drinks",
+    "file": "assets/products/signature-drinks-pink-lemonade.jpg",
+    "name": "Pink Lemonade"
+  },
+  {
+    "source": "images/Signature Drinks/Tropical Hibiscus.png",
+    "category": "Signature Drinks",
+    "file": "assets/products/signature-drinks-tropical-hibiscus.jpg",
+    "name": "Tropical Hibiscus"
+  },
+  {
+    "source": "images/Winter Drink/Bueno Hot Chocolate.png",
+    "category": "Winter Drink",
+    "file": "assets/products/winter-drink-bueno-hot-chocolate.jpg",
+    "name": "Bueno Hot Chocolate"
+  },
+  {
+    "source": "images/Winter Drink/Strawberry Hot Chocolate.png",
+    "category": "Winter Drink",
+    "file": "assets/products/winter-drink-strawberry-hot-chocolate.jpg",
+    "name": "Strawberry Hot Chocolate"
+  }
+]

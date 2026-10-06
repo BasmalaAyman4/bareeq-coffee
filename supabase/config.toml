@@ -1,0 +1,5 @@
+project_id = "vdoxjbftaegdjvjpspql"
+[functions.bareeq-api]
+verify_jwt = false
+[functions.bareeq-worker]
+verify_jwt = false

@@ -5,20 +5,18 @@ import * as React from 'react';
 import { cn } from '@/lib/utils';
 
 const buttonVariants = cva(
-  "inline-flex shrink-0 items-center justify-center gap-2 rounded-md text-sm font-medium whitespace-nowrap transition-all outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
+  "inline-flex shrink-0 items-center justify-center gap-2 rounded-xl text-sm font-bold whitespace-nowrap transition-all outline-none focus-visible:ring-[3px] focus-visible:ring-bareeq-gold/45 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
   {
     variants: {
       variant: {
-        default: 'bg-primary text-primary-foreground hover:bg-primary/90',
+        default: 'bg-bareeq-burgundy text-bareeq-ivory hover:bg-bareeq-wine',
         destructive:
-          'bg-destructive text-white hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:bg-destructive/60 dark:focus-visible:ring-destructive/40',
+          'bg-red-700 text-white hover:bg-red-800 focus-visible:ring-red-700/20',
         outline:
-          'border bg-background shadow-xs hover:bg-accent hover:text-accent-foreground dark:border-input dark:bg-input/30 dark:hover:bg-input/50',
-        secondary:
-          'bg-secondary text-secondary-foreground hover:bg-secondary/80',
-        ghost:
-          'hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50',
-        link: 'text-primary underline-offset-4 hover:underline',
+          'border border-bareeq-burgundy/35 bg-transparent text-bareeq-burgundy hover:bg-bareeq-blush/40',
+        secondary: 'bg-bareeq-cream text-bareeq-burgundy hover:bg-bareeq-blush',
+        ghost: 'text-bareeq-burgundy hover:bg-bareeq-blush/45',
+        link: 'text-bareeq-burgundy underline-offset-4 hover:underline',
       },
       size: {
         default: 'h-9 px-4 py-2 has-[>svg]:px-3',
@@ -62,3 +60,46 @@ function Button({
 }
 
 export { Button, buttonVariants };
+
+import type { ButtonHTMLAttributes } from 'react';
+export type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
+  tone?: 'primary' | 'secondary' | 'quiet' | 'danger';
+  loading?: boolean;
+};
+export function UIButton({
+  className = '',
+  tone = 'primary',
+  loading = false,
+  children,
+  disabled,
+  ...props
+}: ButtonProps) {
+  const tones = {
+    primary:
+      'border-bareeq-burgundy bg-bareeq-burgundy text-bareeq-ivory hover:border-bareeq-wine hover:bg-bareeq-wine focus:ring-bareeq-burgundy/25',
+    secondary:
+      'border border-bareeq-burgundy/25 bg-bareeq-ivory text-bareeq-burgundy hover:bg-bareeq-blush/35 focus:ring-bareeq-burgundy/15',
+    quiet:
+      'bg-transparent text-bareeq-burgundy hover:bg-bareeq-blush/45 focus:ring-bareeq-burgundy/15',
+    danger: 'bg-red-700 text-white hover:bg-red-800 focus:ring-red-700/20',
+  };
+  return (
+    <button
+      className={cn(
+        'inline-flex min-h-10 items-center justify-center gap-2 rounded-xl border-none px-4 py-2.5 text-sm font-bold transition focus:outline-none focus:ring-4 disabled:pointer-events-none disabled:opacity-55',
+        tones[tone],
+        className,
+      )}
+      disabled={disabled || loading}
+      {...props}
+    >
+      {loading && (
+        <span
+          className="size-4 animate-spin rounded-full border-2 border-current border-r-transparent"
+          aria-hidden="true"
+        />
+      )}
+      {children}
+    </button>
+  );
+}

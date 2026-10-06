@@ -10,6 +10,8 @@
 /.codex/
 *.tsbuildinfo
 *.log
+/work/
+/supabase/.temp/
 
 # Private environment values
 .env*

@@ -1,10 +1,23 @@
 import { createDocument } from './document.mjs';
+import { execFileSync } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
 import { createRequire, builtinModules } from 'node:module';
 import esbuild from 'esbuild-wasm/lib/browser.js';
 import { pathToFileURL } from 'node:url';
 const root = process.cwd();
+try {
+  process.loadEnvFile('.env.local');
+} catch {}
+const publicConfig = {
+  url:
+    process.env.PUBLIC_SUPABASE_URL ||
+    'https://vdoxjbftaegdjvjpspql.supabase.co',
+  key:
+    process.env.PUBLIC_SUPABASE_KEY ||
+    'sb_publishable_gclaFmqO5H4XwackSK6SNw_FgdUq-zK',
+  vapid: process.env.PUBLIC_VAPID_KEY || '',
+};
 globalThis.self = globalThis;
 await esbuild.initialize({
   wasmModule: await WebAssembly.compile(
@@ -75,7 +88,10 @@ const common = {
   bundle: true,
   write: false,
   plugins: [plugin],
-  define: { 'process.env.NODE_ENV': '"production"' },
+  define: {
+    'process.env.NODE_ENV': '"production"',
+    __PUBLIC_CONFIG__: JSON.stringify(publicConfig),
+  },
   jsx: 'automatic',
   logLevel: 'warning',
   minify: true,
@@ -103,6 +119,18 @@ fs.writeFileSync(
   'dist/style.css',
   fs.readFileSync('src/styles/globals.css', 'utf8'),
 );
+execFileSync(
+  process.execPath,
+  [
+    path.join(root, 'node_modules', 'tailwindcss', 'lib', 'cli.js'),
+    '-i',
+    path.join(root, 'src', 'styles', 'tailwind.css'),
+    '-o',
+    path.join(root, 'dist', 'tailwind.css'),
+    '--minify',
+  ],
+  { cwd: root, stdio: 'inherit' },
+);
 const products = JSON.parse(
   fs.readFileSync('src/data/products.json', 'utf8').replace(/^\uFEFF/, ''),
 );
@@ -118,14 +146,16 @@ for (const route of routes) {
   fs.mkdirSync(dir, { recursive: true });
   fs.writeFileSync(path.join(dir, 'index.html'), html);
 }
-fs.unlinkSync('dist/render.cjs');
+// The rendering module can already be absent if the build was interrupted
+// after prerendering. Its absence is harmless because it is never deployed.
+fs.rmSync('dist/render.cjs', { force: true });
 fs.writeFileSync(
   'dist/404.html',
   createDocument('Page not found', render('/404')),
 );
 // GitHub Pages project sites are served below /bareeq-coffee. Rewrite the
 // document-level assets in the artifact while local/Vercel builds stay root-based.
-if (process.env.GITHUB_ACTIONS === 'true') {
+if (process.env.DEPLOY_TARGET === 'github-pages') {
   const walk = (directory) => {
     for (const entry of fs.readdirSync(directory, { withFileTypes: true })) {
       const file = path.join(directory, entry.name);
@@ -137,7 +167,7 @@ if (process.env.GITHUB_ACTIONS === 'true') {
           source
             .replaceAll('href="/', 'href="/bareeq-coffee/')
             .replaceAll('src="/', 'src="/bareeq-coffee/')
-            .replaceAll("url(/assets/", "url(/bareeq-coffee/assets/")
+            .replaceAll('url(/assets/', 'url(/bareeq-coffee/assets/')
             .replaceAll("'/assets/", "'/bareeq-coffee/assets/")
             .replaceAll('"/assets/', '"/bareeq-coffee/assets/'),
         );

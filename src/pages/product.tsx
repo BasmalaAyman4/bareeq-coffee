@@ -1,40 +1,57 @@
-import {
-  Picture,
-  type Product,
-  ProductCard,
-  Quantity,
-  price,
-} from '@/components/products';
-import { useCart } from '@/components/cart-provider';
 import { Button } from '@/components/ui/button';
-import products from '@/data/products.json';
+import { Quantity } from '@/components/ui/quantity';
+import { useCart } from '@/features/cart/hooks/use-cart';
+import { ProductCard } from '@/features/catalog/components/product-card';
+import { Picture } from '@/features/catalog/components/product-image';
+import { price } from '@/features/catalog/format-price';
+import { useProducts } from '@/features/catalog/hooks/use-menu';
 import Link from '@/router';
+import { type Product } from '@/types/catalog';
 import { ArrowUpRight, Plus } from 'lucide-react';
 import { useState } from 'react';
+import { useI18n } from '@/i18n/i18n-provider';
+import { catalogLabel } from '@/i18n/catalog-label';
 export function ProductPage({ product }: { product: Product }) {
+  const products = useProducts();
   const [q, setQ] = useState(1);
+  const [variant, setVariant] = useState(
+    product.variants.find((v) => v.available)?.id ?? '',
+  );
+  const [extras, setExtras] = useState<string[]>([]);
   const { add } = useCart();
+  const { language, t } = useI18n();
+  const name = catalogLabel(product, language);
   return (
     <div className="wrap page-content">
       <nav className="breadcrumb" aria-label="Breadcrumb">
-        <Link href="/menu">Menu</Link>
+        <Link href="/menu">{t('menu')}</Link>
         <span>/</span>
         <Link href={'/menu?category=' + encodeURIComponent(product.category)}>
-          {product.category}
+          {language === 'ar' && product.category_ar
+            ? product.category_ar
+            : product.category}
         </Link>
         <span>/</span>
-        <span>{product.name}</span>
+        <span>{name}</span>
       </nav>
       <div className="product-detail">
         <div className="detail-image">
           <Picture product={product} large />
         </div>
         <div className="detail-copy">
-          <p className="eyebrow">{product.category}</p>
-          <h1>{product.name}</h1>
+          <p className="eyebrow">
+            {language === 'ar' && product.category_ar
+              ? product.category_ar
+              : product.category}
+          </p>
+          <h1>{name}</h1>
           <p className="detail-price">{price(product.price)}</p>
           {product.description && (
-            <p className="product-description">{product.description}</p>
+            <p className="product-description">
+              {language === 'ar' && product.description_ar
+                ? product.description_ar
+                : product.description}
+            </p>
           )}
           {product.id === 'La5EfigDxNwOuGZdhrp1' && (
             <div className="ingredient-list">
@@ -57,13 +74,53 @@ export function ProductPage({ product }: { product: Product }) {
             café before ordering.
           </p>
           <div className="product-order">
+            {product.variants.length > 0 && (
+              <label>
+                {t('size')}
+                <select
+                  value={variant}
+                  onChange={(e) => setVariant(e.target.value)}
+                >
+                  {product.variants
+                    .filter((v) => v.available)
+                    .map((v) => (
+                      <option key={v.id} value={v.id}>
+                        {catalogLabel(v, language)} ·{' '}
+                        {price(v.price_minor / 100)}
+                      </option>
+                    ))}
+                </select>
+              </label>
+            )}
+            {product.modifiers
+              .filter((m) => m.available)
+              .map((m) => (
+                <label className="modifier-choice" key={m.id}>
+                  <input
+                    type="checkbox"
+                    checked={extras.includes(m.id)}
+                    onChange={(e) =>
+                      setExtras(
+                        e.target.checked
+                          ? [...extras, m.id]
+                          : extras.filter((id) => id !== m.id),
+                      )
+                    }
+                  />
+                  {catalogLabel(m, language)} +{price(m.price_minor / 100)}
+                </label>
+              ))}
             <Quantity value={q} onChange={setQ} />
             <Button
               className="button"
-              disabled={!product.available}
-              onClick={() => add(product.id, q)}
+              disabled={
+                !product.available ||
+                (product.variants.length > 0 && !variant) ||
+                (product.price === null && !variant)
+              }
+              onClick={() => add(product.id, q, variant || null, extras)}
             >
-              {product.available ? 'Add to bag' : 'Currently unavailable'}
+              {product.available ? t('addToOrder') : t('soldOut')}
               <Plus size={18} />
             </Button>
           </div>

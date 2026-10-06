@@ -1,7 +1,7 @@
-import { useLayoutEffect } from 'react';
 import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { MotionPathPlugin } from 'gsap/MotionPathPlugin';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { useLayoutEffect } from 'react';
 
 gsap.registerPlugin(ScrollTrigger, MotionPathPlugin);
 

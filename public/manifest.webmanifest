@@ -1,0 +1,11 @@
+{
+ "name":"Bareeq Founder",
+ "short_name":"Bareeq",
+ "id":"/founder",
+ "start_url":"/founder",
+ "scope":"/",
+ "display":"standalone",
+ "background_color":"#f8f3ea",
+ "theme_color":"#741f28",
+ "icons":[{"src":"/assets/bareeq-logo.png","sizes":"any","type":"image/png","purpose":"any"}]
+}

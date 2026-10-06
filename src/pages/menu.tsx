@@ -1,24 +1,18 @@
-import { ProductCard } from '@/components/products';
 import { Button } from '@/components/ui/button';
-import products from '@/data/products.json';
+import { ProductCard } from '@/features/catalog/components/product-card';
+import { useMenu, useProducts } from '@/features/catalog/hooks/use-menu';
 import { useEffect, useState } from 'react';
 export function MenuPage({ category: initial = 'All' }: { category?: string }) {
+  const products = useProducts();
+  const menu = useMenu();
   const [category, setCategory] = useState(initial);
   const [query, setQuery] = useState('');
   const [limit, setLimit] = useState(12);
-  const groups = [
-    'All',
-    'Coffee',
-    'Matcha',
-    'Refreshers',
-    'Cakes & Sweets',
-    'Savory',
-    'Other',
-  ];
+  const groups = ['All', ...(menu.data?.categories.map((c) => c.name) ?? [])];
   useEffect(() => {
     const c = new URLSearchParams(location.search).get('category');
     if (initial === 'All' && c && groups.includes(c)) setCategory(c);
-  }, [initial]);
+  }, [initial, menu.data]);
   const results = products.filter(
     (p) =>
       (category === 'All' || p.category === category) &&
@@ -110,7 +104,7 @@ export function MenuPage({ category: initial = 'All' }: { category?: string }) {
         <p role="status">
           {results.length} {results.length === 1 ? 'item' : 'items'}
         </p>
-        <p>Prices as listed on the original menu.</p>
+        <p>Current menu prices in EGP.</p>
       </div>
       {results.length ? (
         <div className="product-grid">
@@ -120,7 +114,13 @@ export function MenuPage({ category: initial = 'All' }: { category?: string }) {
         </div>
       ) : (
         <div className="empty-state">
-          <h2>No matches just yet.</h2>
+          <h2>
+            {menu.isPending
+              ? 'Loading the menu…'
+              : menu.isError
+                ? 'Menu temporarily unavailable.'
+                : 'No matches just yet.'}
+          </h2>
           <p>Try another product name or category.</p>
           <Button
             className="button"
@@ -145,7 +145,7 @@ export function MenuPage({ category: initial = 'All' }: { category?: string }) {
       )}
       <p className="menu-note">
         Drink artwork is illustrative where original photography is unavailable.
-        Availability and final pricing are confirmed by the café.
+        Availability and final pricing are checked at checkout.
       </p>
     </div>
   );

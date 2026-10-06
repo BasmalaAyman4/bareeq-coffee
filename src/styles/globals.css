@@ -3386,3 +3386,428 @@ html {
     height: calc(100% - 40px - var(--mobile-nav-height));
   }
 }
+/* Operational screens reuse Bareeq's existing palette and typography. */
+.backend-notice {
+  padding: 18px 22px;
+  margin: 18px auto;
+  background: #f3e4c7;
+  border-left: 4px solid #741f28;
+  border-radius: 8px;
+}
+.backend-notice button {
+  font-weight: 700;
+  text-decoration: underline;
+}
+.product-order {
+  flex-wrap: wrap;
+}
+.modifier-choice {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.modifier-choice input {
+  width: auto;
+}
+select {
+  padding: 12px;
+  border: 1px solid #d4c7b6;
+  border-radius: 8px;
+  background: #fffaf2;
+  color: #442022;
+  font: inherit;
+}
+label {
+  display: block;
+}
+label input,
+label textarea,
+label select {
+  display: block;
+  margin-top: 6px;
+  margin-bottom: 18px;
+}
+input[type='checkbox'] {
+  display: inline-block;
+  width: auto;
+  margin: 0 8px 0 0;
+}
+.staff-layout {
+  min-height: 100vh;
+  background: #f8f3ea;
+  color: #452a27;
+  display: grid;
+  grid-template-columns: 230px 1fr;
+}
+.staff-sidebar {
+  background: #741f28;
+  color: #fff7e8;
+  padding: 32px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+}
+.staff-sidebar img {
+  width: 130px;
+  max-height: 120px;
+  object-fit: contain;
+  margin: 0 auto 30px;
+}
+.staff-sidebar .eyebrow {
+  color: #e3c59d;
+}
+.staff-sidebar button {
+  text-align: left;
+  padding: 12px 16px;
+  border-radius: 12px;
+  color: inherit;
+}
+.staff-sidebar button.active,
+.staff-sidebar button:hover {
+  background: #ffffff19;
+}
+.staff-sidebar-bottom {
+  margin-top: auto;
+  font-size: 12px;
+  line-height: 1.6;
+}
+.staff-main {
+  padding: 44px clamp(22px, 4vw, 64px);
+  min-width: 0;
+}
+.staff-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 34px;
+}
+.staff-header h1 {
+  font-size: clamp(32px, 4vw, 56px);
+  line-height: 1.1;
+  margin: 10px 0;
+}
+.staff-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.staff-actions .button {
+  font-size: 13px;
+  padding: 12px 18px;
+}
+.staff-toolbar {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+  margin: 24px 0;
+}
+.staff-toolbar input {
+  flex: 1;
+  min-width: 0;
+}
+.staff-toolbar button {
+  white-space: nowrap;
+}
+.staff-alert {
+  background: #eadbbd;
+  border: 1px solid #d1b689;
+  border-radius: 14px;
+  padding: 18px 22px;
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+.staff-alert button {
+  text-decoration: underline;
+}
+.order-board {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 18px;
+}
+.order-tile {
+  background: #fffdf8;
+  border: 1px solid #e5d9c9;
+  border-radius: 20px;
+  padding: 24px;
+  text-align: left;
+  box-shadow: 0 5px 18px #4b261007;
+}
+.order-tile > div,
+.order-tile footer {
+  display: flex;
+  justify-content: space-between;
+  gap: 14px;
+}
+.order-tile h2 {
+  font-size: 25px;
+  margin: 22px 0 10px;
+}
+.order-tile p,
+.order-tile time {
+  font-size: 13px;
+}
+.order-tile footer {
+  border-top: 1px solid #eadfce;
+  margin-top: 24px;
+  padding-top: 16px;
+  font-size: 14px;
+}
+.status-pill {
+  display: inline-block;
+  background: #eee8db;
+  border-radius: 30px;
+  padding: 6px 12px;
+  font-size: 12px;
+  text-transform: capitalize;
+}
+.status-new {
+  border-top: 5px solid #741f28;
+}
+.status-awaiting_payment_verification {
+  border-top: 5px solid #b17c25;
+}
+.status-ready {
+  border-top: 5px solid #4a7857;
+}
+.staff-login {
+  max-width: 500px;
+  margin: 6vh auto;
+  padding: 32px;
+}
+.staff-login img {
+  display: block;
+  width: 140px;
+  margin: 38px auto;
+}
+.staff-login h1 {
+  font-size: 44px;
+  margin-bottom: 32px;
+}
+.staff-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: #29151999;
+  z-index: 1000;
+  display: flex;
+  justify-content: flex-end;
+}
+.staff-modal {
+  background: #fffaf2;
+  width: min(580px, 100%);
+  overflow: auto;
+  padding: 40px;
+  box-shadow: -12px 0 40px #0002;
+}
+.modal-close {
+  display: block;
+  margin-left: auto;
+  margin-bottom: 24px;
+}
+.staff-modal h2 {
+  font-size: 36px;
+}
+.staff-line {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 18px 0;
+  border-bottom: 1px solid #e5d9c9;
+}
+.staff-line small {
+  display: block;
+  margin-top: 6px;
+}
+.receipt-image {
+  width: 100%;
+  max-height: 500px;
+  object-fit: contain;
+  margin: 20px 0;
+}
+.verification-note {
+  background: #f3e4c7;
+  padding: 18px;
+  border-radius: 12px;
+  margin: 20px 0;
+}
+.report-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 16px;
+  margin: 30px 0;
+}
+.report-grid article {
+  background: #fffdf8;
+  border: 1px solid #e5d9c9;
+  padding: 24px;
+  border-radius: 16px;
+}
+.report-grid p {
+  text-transform: capitalize;
+  font-size: 13px;
+}
+.report-grid h2 {
+  font-size: 28px;
+  margin-top: 15px;
+}
+.menu-admin-list {
+  margin-top: 24px;
+}
+.menu-admin-list article {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  align-items: center;
+  padding: 20px 0;
+  border-bottom: 1px solid #dfd2bf;
+}
+.menu-admin-list article > div {
+  flex: 1;
+  min-width: 180px;
+}
+.menu-admin-list details {
+  width: 100%;
+}
+.menu-admin-list details form {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 14px;
+}
+.menu-editor {
+  max-width: 640px;
+  padding: 28px;
+  background: #fffdf8;
+  border: 1px solid #e5d9c9;
+  border-radius: 18px;
+  margin: 24px 0;
+}
+.menu-editor input,
+.menu-editor textarea,
+.menu-editor select {
+  width: 100%;
+}
+.menu-editor input[type='checkbox'] {
+  width: auto;
+}
+.counter-picker {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  max-height: 300px;
+  overflow: auto;
+}
+.counter-picker .button {
+  font-size: 12px;
+  padding: 10px 14px;
+}
+.staff-main .wrap {
+  width: 100%;
+  padding: 0;
+}
+.staff-main .page-content {
+  padding-top: 32px;
+}
+.checkout-panel .button {
+  margin: 12px 8px 12px 0;
+}
+@media (max-width: 900px) {
+  .staff-layout {
+    grid-template-columns: 1fr;
+  }
+  .staff-sidebar {
+    position: static;
+    height: auto;
+    flex-direction: row;
+    align-items: center;
+    overflow: auto;
+    padding: 14px;
+  }
+  .staff-sidebar img {
+    width: 60px;
+    margin: 0;
+  }
+  .staff-sidebar .eyebrow,
+  .staff-sidebar-bottom p {
+    display: none;
+  }
+  .staff-sidebar-bottom {
+    margin: 0;
+  }
+  .staff-sidebar button {
+    white-space: nowrap;
+    padding: 10px;
+  }
+  .staff-header {
+    display: block;
+  }
+  .staff-header .staff-actions {
+    margin-top: 18px;
+  }
+  .staff-main {
+    padding: 24px 18px;
+  }
+  .staff-toolbar {
+    flex-wrap: wrap;
+  }
+  .staff-toolbar input {
+    flex-basis: 100%;
+  }
+  .staff-modal {
+    padding: 24px;
+  }
+  .order-board {
+    grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  }
+}
+.counter-product {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 190px;
+  max-width: 230px;
+  padding: 16px;
+  border: 1px solid #e5d9c9;
+  border-radius: 14px;
+  background: #fffdf8;
+}
+.counter-product strong {
+  font-size: 14px;
+}
+.counter-product label {
+  font-size: 12px;
+}
+
+/* The language provider owns document direction; these small rules keep the
+   existing Tailwind and storefront layouts comfortable in Arabic without
+   duplicating RTL variants throughout every component. */
+[dir='rtl'] body {
+  direction: rtl;
+}
+[dir='rtl'] .staff-sidebar {
+  border-right: 0 !important;
+  border-left: 1px solid rgb(255 255 255 / 0.15) !important;
+}
+[dir='rtl'] .staff-sidebar button {
+  text-align: right;
+}
+[dir='rtl'] .staff-sidebar button:hover {
+  transform: translateX(-2px);
+}
+[dir='rtl'] .staff-sidebar .ml-auto {
+  margin-left: 0;
+  margin-right: auto;
+}
+[dir='rtl'] .staff-login input,
+[dir='rtl'] .staff-login textarea {
+  text-align: right;
+}
+[dir='rtl'] .main-nav,
+[dir='rtl'] .header-actions {
+  direction: rtl;
+}

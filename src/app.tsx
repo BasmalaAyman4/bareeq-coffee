@@ -1,8 +1,11 @@
+import { MenuStatus } from '@/features/catalog/components/menu-status';
+import { useMenu, useProducts } from '@/features/catalog/hooks/use-menu';
+import { CartProvider } from '@/providers/cart-provider';
+import { BackendProvider } from '@/providers/query-provider';
 import { useEffect } from 'react';
-import { CartProvider } from './components/cart-provider';
-import { Shell } from './components/shell';
-import products from './data/products.json';
+import { Shell } from './layouts/storefront/storefront-layout';
 import { CartPage } from './pages/cart';
+import { Dashboard } from './features/dashboard/dashboard-workspace';
 import { Home } from './pages/home';
 import { LocationsPage } from './pages/locations';
 import { MenuPage } from './pages/menu';
@@ -10,8 +13,20 @@ import { NotFound } from './pages/not-found';
 import { ProductPage } from './pages/product';
 import { usePathname } from './router';
 import { pageTitles } from './routes';
+import { I18nProvider } from './i18n/i18n-provider';
 
 export function App() {
+  return (
+    <I18nProvider>
+      <BackendProvider>
+        <AppContent />
+      </BackendProvider>
+    </I18nProvider>
+  );
+}
+function AppContent() {
+  const products = useProducts();
+  const menu = useMenu();
   const path = usePathname().replace(/\/$/, '') || '/';
   const product = path.startsWith('/product/')
     ? products.find((item) => item.slug === path.slice('/product/'.length))
@@ -23,6 +38,8 @@ export function App() {
 
   function renderPage() {
     switch (path) {
+      case '/dashboard':
+        return <Dashboard />;
       case '/':
         return <Home />;
       case '/menu':
@@ -38,7 +55,11 @@ export function App() {
       case '/checkout':
         return <CartPage key="checkout" checkout />;
       default:
-        return product ? (
+        return path.startsWith('/product/') && menu.isPending ? (
+          <div className="wrap page-content" role="status">
+            Loading your selection…
+          </div>
+        ) : product ? (
           <ProductPage key={product.id} product={product} />
         ) : (
           <NotFound />
@@ -48,7 +69,14 @@ export function App() {
 
   return (
     <CartProvider>
-      <Shell>{renderPage()}</Shell>
+      {path === '/dashboard' ? (
+        renderPage()
+      ) : (
+        <Shell>
+          {path !== '/' && <MenuStatus />}
+          {renderPage()}
+        </Shell>
+      )}
     </CartProvider>
   );
 }

@@ -1,0 +1,74 @@
+[
+  {
+    "name": "live quote uses current DB price",
+    "passed": true
+  },
+  {
+    "name": "reject forged total_minor",
+    "passed": true
+  },
+  {
+    "name": "reject forged payment_status",
+    "passed": true
+  },
+  {
+    "name": "reject forged discount",
+    "passed": true
+  },
+  {
+    "name": "reject forged role",
+    "passed": true
+  },
+  {
+    "name": "reject zero quantity over HTTP",
+    "passed": true
+  },
+  {
+    "name": "concurrent duplicate submissions create one order",
+    "passed": true
+  },
+  {
+    "name": "cash order immediately actionable",
+    "passed": true
+  },
+  {
+    "name": "customer can resume saved order",
+    "passed": true
+  },
+  {
+    "name": "guessed customer capability denied",
+    "passed": true
+  },
+  {
+    "name": "unauthenticated status mutation denied",
+    "passed": true
+  },
+  {
+    "name": "forged JWT denied",
+    "passed": true
+  },
+  {
+    "name": "InstaPay waits for receipt",
+    "passed": true
+  },
+  {
+    "name": "spoofed image rejected",
+    "passed": true
+  },
+  {
+    "name": "valid image re-encoded and waits for Founder",
+    "passed": true
+  },
+  {
+    "name": "private receipt requires Founder auth",
+    "passed": true
+  },
+  {
+    "name": "anonymous direct order read denied",
+    "passed": true
+  },
+  {
+    "name": "direct privileged pricing RPC denied",
+    "passed": true
+  }
+]

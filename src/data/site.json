@@ -1,11 +1,11 @@
 {
   "sourceUrl": "https://bareeq-coffee.web.app/",
   "verifiedAt": "2026-09-28",
-  "currency": null,
+  "currency": "EGP",
   "address": "حلوان - شارع مصطفى صفوت",
   "mapEmbed": "https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d1091.6697369193253!2d31.340120293034396!3d29.848157709398134!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x145836a4f04452a3%3A0x5e969acfd7b81c43!2zMjYg2KfZhNiv2YPYqtmI2LEg2YXYtdi32YHZiSDYtdmB2YjYqtiMINit2YTZiNin2YYg2KfZhNi02LHZgtmK2KnYjCDZgtiz2YUg2K3ZhNmI2KfZhtiMINmF2K3Yp9mB2LjYqSDYp9mE2YLYp9mH2LHYqeKArCA0MDM2NDMz2Iwg2YXYtdix!5e1!3m2!1sar!2sus!4v1762123169492!5m2!1sar!2sus",
   "whatsapp": "+20 11 10387361",
   "instagram": "https://www.instagram.com/bareeq.eg__/",
   "openingHours": null,
-  "checkoutMode": "whatsapp-review"
+  "checkoutMode": "supabase"
 }

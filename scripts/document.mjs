@@ -25,8 +25,12 @@ export function createDocument(title, content) {
     <meta name="theme-color" content="#741F28">
     <title>${escapeHtml(title)} | Bareeq</title>
     <meta name="description" content="Explore Bareeq coffee, cakes and savory bites. Find us in Helwan, Mostafa Safwat Street.">
+    <link rel="manifest" href="/manifest.webmanifest">
+    <link rel="apple-touch-icon" href="/assets/bareeq-logo.png">
+    <meta name="apple-mobile-web-app-capable" content="yes">
     <link rel="icon" href="/assets/bareeq-logo.png">
     <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="/tailwind.css">
     <script>${introScript}</script>
   </head>
   <body>

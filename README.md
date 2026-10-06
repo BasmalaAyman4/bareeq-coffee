@@ -1,6 +1,6 @@
 # Bareeq
 
-Bareeq's café website: menu, product pages, locations, a shopping bag, and a WhatsApp order review. It uses React and TypeScript and builds a static website. There is no database or payment server.
+Bareeq's café website, secure ordering flow, and operational dashboards. It uses React and TypeScript for a Firebase-hosted frontend, with Supabase as the database and server-side order service.
 
 The opening animation plays automatically whenever the homepage is opened. Visitors who use reduced-motion settings will go straight to the site.
 
@@ -16,16 +16,19 @@ Saving a file in `src` or `public` rebuilds the website. Refresh the browser aft
 
 ## Where to make changes
 
-- **Product names, prices, images, availability:** `src/data/products.json`.
+- **Seed/import source for the original products:** `src/data/products.json`. Live menu names, prices, images and availability are managed in the Founder dashboard and stored in Supabase.
 - **Café contact details, currency, map:** `src/data/site.json`.
 - **Home page and hero:** `src/pages/home.tsx`.
 - **Menu search and category filters:** `src/pages/menu.tsx`.
 - **Individual product page:** `src/pages/product.tsx`.
 - **Shopping bag and checkout:** `src/pages/cart.tsx`.
 - **Location page:** `src/pages/locations.tsx`.
-- **Header, navigation, footer:** `src/components/shell.tsx`.
-- **Saved cart, quantities, storage:** `src/components/cart-provider.tsx`.
-- **Product cards, quantity buttons, price formatting:** `src/components/products.tsx`.
+- **Storefront layout:** `src/layouts/storefront/`.
+- **Saved cart and quantities:** `src/features/cart/` and `src/providers/cart-provider.tsx`.
+- **Product cards, images, menu control:** `src/features/catalog/`.
+- **Checkout and counter order:** `src/features/checkout/` and `src/features/counter/`.
+- **Founder and Cashier dashboards:** `src/features/dashboard/`, `src/features/orders/`, `src/features/auth/`, `src/features/reports/`, and `src/features/settings/`.
+- **Shared UI primitives:** `src/components/ui/`, one file per reusable control.
 - **Intro animation:** `src/components/loader.tsx`.
 - **Colors, fonts, spacing, mobile styles:** `src/styles/globals.css`. Brand colors are at the top.
 - **Photos and logos:** `public/assets`. Reference them as `/assets/filename.webp`.
@@ -37,7 +40,7 @@ bareeq/
   src/
     pages/          Each screen has its own file
     components/     Shared pieces used by multiple screens
-      ui/           Shared button
+      ui/           One reusable control per file
     data/           Editable product and café information
     styles/         Website CSS
     lib/            Small shared helpers
@@ -67,7 +70,7 @@ To add a product, copy an existing product object, assign a new unique `id` and 
 
 ### Add a page
 
-Create the component in `src/pages`, add its route to the switch in `src/app.tsx`, and add its title in `src/routes.ts`. Add a navigation link in `src/components/shell.tsx` if needed. The build generates all routes listed in `src/routes.ts`, plus all product pages.
+Create the route adapter in `src/pages`, add its route to the switch in `src/app.tsx`, and add its title in `src/routes.ts`. Add storefront navigation changes under `src/layouts/storefront/` if needed. See `docs/architecture.md` for the feature boundaries.
 
 ### Keep code readable
 
@@ -86,8 +89,68 @@ Before publishing, run typecheck, format:check, and build. Existing Sites hostin
 
 ## How orders work
 
-The shopping bag is saved in the visitor's browser. Checkout prepares a WhatsApp message for the visitor to review and send. The café confirms availability and the final total. No payment is collected by this website.
+The shopping bag is saved in the visitor's browser, but it is never trusted by the backend. Checkout requests a current server-calculated total, then creates an order from product IDs, selected variants/extras and quantities only. Cash web orders go to the Cashier queue. InstaPay orders need a private receipt and Founder verification before the Cashier can see them.
 
 ## Cleanup notes
 
 Unused starter UI components, database examples, old framework configurations, one-off repair scripts and caches were removed. The working static build was retained and made the default. Page code was separated and formatted. Keep `.openai`, `.git`, package files, source, and referenced assets when copying this project.
+
+## Supabase orders and dashboards
+
+Bareeq now keeps Firebase Hosting for the static frontend and uses Supabase for the menu, current prices, orders, staff sessions, private receipts, reporting, audit history, realtime updates and server-side validation. The public design, assets and animations remain in place.
+
+The database schema and deployment history are in `supabase/migrations`; `supabase/seed.sql` imports the original menu and creates the Helwan branch. The backend verifies all prices, availability, selected sizes/extras, payment transitions and staff roles. The browser bag is only UI state.
+
+### Staff access
+
+Use the single staff-code login at `/dashboard`:
+
+| Workspace | Code | Temporary password |
+| --------- | ---- | ------------------ |
+| Founder   | `10` | `123456`           |
+| Cashier   | `00` | `123456`           |
+
+Only Founder has access to password management. Founder can change their own password or reset the Cashier password from **Password & access**; the Cashier workspace never exposes that control.
+
+Both accounts must choose a new password at their first login. The Founder can change their own password or reset the Cashier password from **Password**. A reset signs the Cashier out and requires a new password at next sign-in. Staff emails are never shown in the interface.
+
+### Deploy Supabase
+
+The project reference is `vdoxjbftaegdjvjpspql`. Apply the migrations, then deploy `bareeq-api` and `bareeq-worker` from `supabase/functions`. The API intentionally supports guest checkout and checks its own public request capabilities, while staff mutations require a verified session and server-side role. Do not expose service-role keys, VAPID private keys, payment credentials, or worker secrets to the browser.
+
+Set these Edge Function secrets for production:
+
+- `ALLOWED_ORIGINS=https://bareeq-coffee.web.app,https://bareeq-coffee.firebaseapp.com`
+- `VAPID_PUBLIC_KEY`, `VAPID_PRIVATE_KEY`, and `VAPID_SUBJECT=https://bareeq-coffee.web.app`
+
+Founder **Settings** controls the InstaPay transfer details and receipt retention (3–30 days). InstaPay stays disabled until real transfer details are entered. The scheduled worker deletes expired receipt files while retaining order/payment/audit metadata. It also leaves a vendor-neutral integration outbox for a later POS or card-payment adapter.
+
+### Deploy Firebase Hosting
+
+`firebase.json` serves `dist` and rewrites all paths to `index.html`, including direct refreshes of `/dashboard`. The old `/founder` and `/cashier` links remain compatible.
+
+```powershell
+npm run build
+firebase deploy --only hosting
+```
+
+The existing production site is `https://bareeq-coffee.web.app/`. Firebase deploys the frontend only; Supabase migrations, functions, Storage, Auth, and scheduled jobs deploy separately.
+
+### Notifications and reports
+
+The Founder can add `/dashboard` to an iPhone Home Screen and choose **Enable notifications**. iOS web push requires the installed web app and a user-granted permission. If notifications, audio, or realtime fail, the authoritative queue reconnects and polls; orders are not lost.
+
+Daily reports show completed-order sales/revenue, never profit, because no cost data is stored. CSV export uses immutable order snapshots. Receipts accept JPG, PNG, or WebP only, are limited to 2 MB, re-encoded by the server, and are private; Founder viewing uses a short signed URL.
+
+### Checks
+
+```powershell
+npm run typecheck
+npm test
+npm run test:live
+npm run build
+```
+
+`npm test` validates hostile client payloads. `tests/database.sql` is a rollback-only database suite covering authoritative pricing, price/availability races, role/RLS enforcement, verification concurrency, lifecycle controls, reports and receipt-history preservation. `npm run test:live` runs deployed API checks for quote, duplicate prevention, unauthorized access, receipt flow, and direct API denial. It creates disposable test orders, whose IDs are written to ignored `work/e2e-fixtures.json` for cleanup.
+
+Before launch, verify on `web.app`: Founder/Cashier first password change, Cash checkout to Cashier, InstaPay receipt → Founder confirm/reject → Cashier, direct-route refresh, staff audio, iPhone installed-app push, and queue recovery after reconnecting.
