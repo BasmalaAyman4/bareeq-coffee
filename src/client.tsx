@@ -9,7 +9,8 @@ const app = (
 // Staff pages depend on an auth session and browser-only Supabase state. They
 // intentionally render a fresh client tree so a stale static login shell can
 // never cause a React hydration mismatch after deployment.
-if (/^\/(dashboard|founder|cashier)(\/|$)/.test(location.pathname)) {
+const appPath = location.pathname.replace(/^\/bareeq-coffee/, '') || '/';
+if (/^\/(dashboard|founder|cashier)(\/|$)/.test(appPath)) {
   createRoot(document.getElementById('root')!).render(app);
 } else {
   hydrateRoot(document.getElementById('root')!, app);
