@@ -117,7 +117,6 @@ export function useCheckout({
     }
     const next = { ...saved, id: result.id };
     setPending(next);
-    setOrder(result);
     try {
       localStorage.setItem(PENDING, JSON.stringify(next));
     } catch {}
@@ -127,7 +126,10 @@ export function useCheckout({
       result.status === 'awaiting_receipt'
     ) {
       await uploadReceipt(result, next);
-    } else setConfirmationOpen(true);
+    } else {
+      setOrder(result);
+      setConfirmationOpen(true);
+    }
   }
   async function uploadReceipt(target?: any, saved = pending) {
     target ??= await api('order', { id: order.id, token: saved.token });

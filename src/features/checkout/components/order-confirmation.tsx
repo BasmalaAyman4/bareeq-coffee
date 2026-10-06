@@ -17,7 +17,7 @@ export function OrderConfirmation({
   const needsReceipt = order.status === 'awaiting_receipt';
   return (
     <>
-      {needsReceipt && (
+      {needsReceipt && !confirmationOpen && (
         <section className="checkout-panel">
           <h2>Finish order #{order.number}</h2>
           <p>
