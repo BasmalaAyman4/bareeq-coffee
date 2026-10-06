@@ -6,6 +6,13 @@ import { createRequire, builtinModules } from 'node:module';
 import esbuild from 'esbuild-wasm/lib/browser.js';
 import { pathToFileURL } from 'node:url';
 const root = process.cwd();
+const assetVersion =
+  process.env.GITHUB_SHA?.slice(0, 12) || Date.now().toString(36);
+const versionAssets = (html) =>
+  html
+    .replaceAll('/app.js"', `/app.js?v=${assetVersion}"`)
+    .replaceAll('/style.css"', `/style.css?v=${assetVersion}"`)
+    .replaceAll('/tailwind.css"', `/tailwind.css?v=${assetVersion}"`);
 try {
   process.loadEnvFile('.env.local');
 } catch {}
@@ -144,14 +151,14 @@ for (const route of routes) {
   const html = createDocument(title, render(route));
   const dir = path.join('dist', route);
   fs.mkdirSync(dir, { recursive: true });
-  fs.writeFileSync(path.join(dir, 'index.html'), html);
+  fs.writeFileSync(path.join(dir, 'index.html'), versionAssets(html));
 }
 // The rendering module can already be absent if the build was interrupted
 // after prerendering. Its absence is harmless because it is never deployed.
 fs.rmSync('dist/render.cjs', { force: true });
 fs.writeFileSync(
   'dist/404.html',
-  createDocument('Page not found', render('/404')),
+  versionAssets(createDocument('Page not found', render('/404'))),
 );
 // GitHub Pages can serve the custom 404 document for a deep staff URL before
 // looking up a nested index file. Keep a deterministic fallback for those
