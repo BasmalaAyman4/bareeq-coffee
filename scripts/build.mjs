@@ -187,13 +187,20 @@ if (process.env.DEPLOY_TARGET === 'github-pages') {
             .replaceAll('"/founder"', '"/bareeq-coffee/founder"')
             .replaceAll('"/dashboard"', '"/bareeq-coffee/dashboard"')
             .replaceAll('"/cashier"', '"/bareeq-coffee/cashier"');
+        } else if (entry.name.endsWith('.webmanifest')) {
+          source = source
+            .replaceAll('"start_url":"/founder"', '"start_url":"/bareeq-coffee/founder/"')
+            .replaceAll('"start_url": "/founder"', '"start_url": "/bareeq-coffee/founder/"')
+            .replaceAll('"id":"/founder"', '"id":"/bareeq-coffee/founder"')
+            .replaceAll('"id": "/founder"', '"id": "/bareeq-coffee/founder"');
         }
         source = source
           .replaceAll('url(/assets/', 'url(/bareeq-coffee/assets/')
           .replaceAll("'/assets/", "'/bareeq-coffee/assets/")
           .replaceAll('"/assets/', '"/bareeq-coffee/assets/')
           .replace(/(?<!bareeq-coffee)\/assets\//g, '/bareeq-coffee/assets/')
-          .replaceAll('"scope":"/"', '"scope":"/bareeq-coffee/"');
+          .replaceAll('"scope":"/"', '"scope":"/bareeq-coffee/"')
+          .replaceAll('"scope": "/"', '"scope": "/bareeq-coffee/"');
         fs.writeFileSync(file, source);
       }
     }
