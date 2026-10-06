@@ -153,4 +153,31 @@ fs.writeFileSync(
   'dist/404.html',
   createDocument('Page not found', render('/404')),
 );
+// GitHub Pages project sites are served below /bareeq-coffee. Rewrite
+// document and manifest asset URLs for that deployment target.
+if (process.env.DEPLOY_TARGET === 'github-pages') {
+  const walk = (directory) => {
+    for (const entry of fs.readdirSync(directory, { withFileTypes: true })) {
+      const file = path.join(directory, entry.name);
+      if (entry.isDirectory()) walk(file);
+      else if (/\.(html|js|css|webmanifest)$/.test(entry.name)) {
+        const source = fs.readFileSync(file, 'utf8');
+        fs.writeFileSync(
+          file,
+          source
+            .replaceAll('href="/', 'href="/bareeq-coffee/')
+            .replaceAll('src="/', 'src="/bareeq-coffee/')
+            .replaceAll('url(/assets/', 'url(/bareeq-coffee/assets/')
+            .replaceAll("'/assets/", "'/bareeq-coffee/assets/")
+            .replaceAll('"/assets/', '"/bareeq-coffee/assets/')
+            .replace(/(?<!bareeq-coffee)\/assets\//g, '/bareeq-coffee/assets/')
+            .replaceAll('"/founder', '"/bareeq-coffee/founder')
+            .replaceAll('"/dashboard', '"/bareeq-coffee/dashboard')
+            .replaceAll('"scope":"/"', '"scope":"/bareeq-coffee/"'),
+        );
+      }
+    }
+  };
+  walk('dist');
+}
 console.log('Built ' + routes.length + ' prerendered pages.');
