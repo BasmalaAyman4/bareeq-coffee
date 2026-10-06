@@ -153,6 +153,7 @@ for (const route of routes) {
   fs.mkdirSync(dir, { recursive: true });
   fs.writeFileSync(path.join(dir, 'index.html'), versionAssets(html));
 }
+fs.writeFileSync(path.join(outputDirectory, '.nojekyll'), '');
 // The rendering module can already be absent if the build was interrupted
 // after prerendering. Its absence is harmless because it is never deployed.
 fs.rmSync('dist/render.cjs', { force: true });
@@ -163,7 +164,7 @@ fs.writeFileSync(
 // GitHub Pages can serve the custom 404 document for a deep staff URL before
 // looking up a nested index file. Keep a deterministic fallback for those
 // three protected entrypoints.
-const staffFallback = `<script>(function(){var p=location.pathname.replace(/\\/$/,'');var m={'/bareeq-coffee/dashboard':'/bareeq-coffee/dashboard/index.html','/bareeq-coffee/dashboard/index.html':'/bareeq-coffee/dashboard/index.html','/bareeq-coffee/founder':'/bareeq-coffee/founder/index.html','/bareeq-coffee/founder/index.html':'/bareeq-coffee/founder/index.html','/bareeq-coffee/cashier':'/bareeq-coffee/cashier/index.html','/bareeq-coffee/cashier/index.html':'/bareeq-coffee/cashier/index.html'};if(m[p]&&p!==m[p])location.replace(m[p]);})();</script>`;
+const staffFallback = `<script>(function(){var p=location.pathname.replace(/\\/$/,'');var m={'/bareeq-coffee/dashboard':'/bareeq-coffee/dashboard/index.html','/dashboard':'/bareeq-coffee/dashboard/index.html','/bareeq-coffee/founder':'/bareeq-coffee/founder/index.html','/founder':'/bareeq-coffee/founder/index.html','/bareeq-coffee/cashier':'/bareeq-coffee/cashier/index.html','/cashier':'/bareeq-coffee/cashier/index.html'};if(m[p]&&location.pathname!==m[p])location.replace(m[p]);var h=location.hash.replace(/^#/,'');if(m[h])location.replace(m[h]);})();</script>`;
 fs.writeFileSync(
   'dist/404.html',
   fs
