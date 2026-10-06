@@ -15,6 +15,9 @@ import { usePathname } from './router';
 import { pageTitles } from './routes';
 import { I18nProvider } from './i18n/i18n-provider';
 
+import { FounderPage } from './pages/founder';
+import { CashierPage } from './pages/cashier';
+
 export function App() {
   return (
     <I18nProvider>
@@ -27,7 +30,9 @@ export function App() {
 function AppContent() {
   const products = useProducts();
   const menu = useMenu();
-  const path = usePathname().replace(/\/$/, '') || '/';
+  const rawPath = usePathname();
+  const path =
+    rawPath.replace(/\/index\.html$/, '').replace(/\/$/, '') || '/';
   const product = path.startsWith('/product/')
     ? products.find((item) => item.slug === path.slice('/product/'.length))
     : undefined;
@@ -40,6 +45,10 @@ function AppContent() {
     switch (path) {
       case '/dashboard':
         return <Dashboard />;
+      case '/founder':
+        return <FounderPage />;
+      case '/cashier':
+        return <CashierPage />;
       case '/':
         return <Home />;
       case '/menu':
@@ -67,9 +76,11 @@ function AppContent() {
     }
   }
 
+  const isStaffRoute = ['/dashboard', '/founder', '/cashier'].includes(path);
+
   return (
     <CartProvider>
-      {path === '/dashboard' ? (
+      {isStaffRoute ? (
         renderPage()
       ) : (
         <Shell>

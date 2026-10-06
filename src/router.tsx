@@ -9,13 +9,17 @@ export function usePathname() {
   const initial = useContext(ServerPath);
   const clientPath = () => {
     const hash = window.location.hash.replace(/^#/, '');
-    return (
-      (hash.startsWith('/')
-        ? hash
-        : window.location.pathname.replace(basePath(), '')) || '/'
-    );
+    const raw = hash.startsWith('/')
+      ? hash
+      : window.location.pathname.replace(basePath(), '');
+    return raw.replace(/\/index\.html$/, '').replace(/\/$/, '') || '/';
   };
-  const [path, setPath] = useState(initial);
+  const [path, setPath] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return clientPath();
+    }
+    return initial;
+  });
   useEffect(() => {
     const update = () => setPath(clientPath());
     update();
