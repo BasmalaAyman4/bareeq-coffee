@@ -5,6 +5,7 @@ import { api } from '@/services/api';
 
 import type { DashboardController } from '@/features/dashboard/hooks/use-dashboard';
 import { useI18n } from '@/i18n/i18n-provider';
+import { OrderAmounts } from './order-amounts';
 export function OrderDetailsModal({
   founder,
   setError,
@@ -27,7 +28,7 @@ export function OrderDetailsModal({
   | 'run'
   | 'transition'
 >) {
-  const { t } = useI18n();
+  const { t, isArabic } = useI18n();
   return (
     <Dialog
       open={!!selected}
@@ -47,6 +48,12 @@ export function OrderDetailsModal({
             {selected.fulfillment.replace('_', ' ')}
           </p>
           <p>{selected.notes}</p>
+          {selected.fulfillment === 'delivery' && (
+            <div className="my-3 rounded-xl border border-bareeq-espresso/15 p-3">
+              <strong>{isArabic ? 'عنوان التوصيل' : 'Delivery address'}</strong>
+              <p className="whitespace-pre-wrap">{selected.delivery_address}</p>
+            </div>
+          )}
           {selected.order_items.map((i: any) => (
             <div className="staff-line" key={i.id}>
               <span>
@@ -58,9 +65,11 @@ export function OrderDetailsModal({
               <strong>{money(i.line_minor)}</strong>
             </div>
           ))}
-          <h3>
-            {t('total')} {money(selected.total_minor)}
-          </h3>
+          <OrderAmounts
+            itemsMinor={selected.total_minor - (selected.delivery_minor ?? 0)}
+            deliveryMinor={selected.delivery_minor ?? 0}
+            totalMinor={selected.total_minor}
+          />
           <p>{selected.status.replaceAll('_', ' ')}</p>
           {founder && selected.payment_method === 'instapay' && (
             <>

@@ -23,6 +23,7 @@ function fixture(uploadFails = false) {
   let cursor = 0;
   let cleared = 0;
   const calls = [];
+  const requests = [];
   const storage = new Map();
   globalThis.localStorage = {
     getItem: (key) => storage.get(key) ?? null,
@@ -92,8 +93,9 @@ function fixture(uploadFails = false) {
       config: { url: 'https://example.invalid', key: 'public' },
     },
     '@/services/api': {
-      api: async (action) => {
+      api: async (action, body) => {
         calls.push(action);
+        requests.push({ action, body });
         return order();
       },
     },
@@ -111,6 +113,7 @@ function fixture(uploadFails = false) {
   return {
     render,
     calls,
+    requests,
     storage,
     cleared: () => cleared,
     setStatus: (next) => {
@@ -155,4 +158,48 @@ test('frontend accepts Arabic digits and rejects an invalid Egyptian prefix', ()
     validation.customerError('Customer', '01312345678'),
     /Egyptian mobile/,
   );
+});
+test('invalid details produce field errors without sending an order or a page-wide error', async () => {
+  const f = fixture();
+  f.render().setName(' ');
+  f.render().setPhone('123');
+  f.render().setFulfillment('delivery');
+  assert.deepEqual(f.render().fieldErrors, {});
+  await f.render().place();
+  assert.deepEqual(f.render().fieldErrors, {
+    name: true,
+    phone: true,
+    address: true,
+  });
+  assert.equal(f.render().error, '');
+  assert.deepEqual(f.calls, []);
+  f.render().setPhone('01018652532');
+  assert.equal(f.render().fieldErrors.phone, undefined);
+});
+test('delivery adds exactly EGP 30 and changing to collection removes the fee and address', () => {
+  const f = fixture();
+  assert.equal(f.render().estimatedTotal, 1000);
+  f.render().setFulfillment('delivery');
+  f.render().setAddress('  10 Test Street  ');
+  f.render().setNotes('Leave at reception');
+  assert.equal(f.render().deliveryMinor, 3000);
+  assert.equal(f.render().estimatedTotal, 4000);
+  assert.equal(f.render().payload().address, '10 Test Street');
+  assert.equal(f.render().payload().notes, 'Leave at reception');
+  assert.equal(f.render().payload().delivery_minor, undefined);
+  f.render().setFulfillment('takeaway');
+  assert.equal(f.render().estimatedTotal, 1000);
+  assert.equal(f.render().payload().address, undefined);
+});
+test('delivery address stays in the saved order for safe retries', async () => {
+  const f = fixture();
+  f.render().setReceiptFile(receipt);
+  f.render().setFulfillment('delivery');
+  f.render().setAddress('10 Test Street, apartment 2');
+  await f.render().place();
+  assert.equal(
+    JSON.parse(f.storage.get('pending')).order.address,
+    '10 Test Street, apartment 2',
+  );
+  assert.equal(f.requests[0].body.order.address, '10 Test Street, apartment 2');
 });

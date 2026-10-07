@@ -3,7 +3,7 @@ import { useMenu, useProducts } from '@/features/catalog/hooks/use-menu';
 import { PENDING, secret } from '@/features/checkout/model';
 import { api } from '@/services/api';
 import { config } from '@/lib/supabase';
-import { customerError, normalizePhone, receiptError } from '../validation';
+import { checkoutErrors, normalizePhone, receiptError } from '../validation';
 import { useEffect, useRef, useState } from 'react';
 export function useCheckout({
   checkout = false,
@@ -18,6 +18,7 @@ export function useCheckout({
   const [name, setName] = useState(''),
     [phone, setPhone] = useState(''),
     [notes, setNotes] = useState(''),
+    [address, setAddress] = useState(''),
     [branch, setBranch] = useState(''),
     [method, setMethod] = useState('cash'),
     [fulfillment, setFulfillment] = useState('takeaway');
@@ -29,6 +30,27 @@ export function useCheckout({
   const lock = useRef(false);
   const [receiptFile, setReceiptFile] = useState<File | null>(null);
   const [confirmationOpen, setConfirmationOpen] = useState(false);
+  const [validationAttempted, setValidationAttempted] = useState(false);
+  const formRef = useRef<HTMLFormElement | null>(null);
+  const currentFieldErrors = checkoutErrors({
+    name,
+    phone,
+    address,
+    fulfillment,
+    notes,
+    staff,
+  });
+  const fieldErrors = validationAttempted ? currentFieldErrors : {};
+  function validateDetails() {
+    setValidationAttempted(true);
+    setError('');
+    const first = Object.keys(currentFieldErrors)[0];
+    if (first) {
+      formRef.current?.querySelector<HTMLElement>(`[name="${first}"]`)?.focus();
+      return false;
+    }
+    return true;
+  }
   const selectedBranch = branch || menu.data?.branches[0]?.id || '';
   const transferDetails =
     menu.data?.branches
@@ -44,6 +66,7 @@ export function useCheckout({
         setName(p.customer_name ?? '');
         setPhone(p.phone ?? '');
         setNotes(p.notes ?? '');
+        setAddress(p.address ?? '');
         setBranch(p.branch_id ?? '');
         setMethod(p.payment_method ?? 'cash');
         setFulfillment(p.fulfillment ?? 'takeaway');
@@ -73,10 +96,13 @@ export function useCheckout({
       (l) =>
         l.product?.available && (l.product.price !== null || !!l.variant_id),
     );
+  const deliveryMinor = !staff && fulfillment === 'delivery' ? 3000 : 0;
+  const estimatedTotal = subtotal + deliveryMinor;
   const payload = () => ({
     branch_id: selectedBranch,
     source: staff ? 'cashier' : 'web',
     fulfillment,
+    ...(fulfillment === 'delivery' ? { address: address.trim() } : {}),
     customer_name: name.trim(),
     phone: normalizePhone(phone),
     notes: notes.trim(),
@@ -172,11 +198,11 @@ export function useCheckout({
     setPending(null);
     setOrder(null);
     setQuote(null);
+    setValidationAttempted(false);
   }
   function place() {
     return run(async () => {
-      const invalid = customerError(name, phone, staff);
-      if (invalid) throw new Error(invalid);
+      if (!validateDetails()) return;
       if (!canOrder || !quote)
         throw new Error('Review your current order total first.');
       if (method === 'instapay') {
@@ -218,6 +244,8 @@ export function useCheckout({
     setPhone,
     notes,
     setNotes,
+    address,
+    setAddress,
     branch,
     setBranch,
     method,
@@ -238,6 +266,11 @@ export function useCheckout({
     selectedBranch,
     lines,
     subtotal,
+    deliveryMinor,
+    estimatedTotal,
+    fieldErrors,
+    formRef,
+    validateDetails,
     canOrder,
     payload,
     run,

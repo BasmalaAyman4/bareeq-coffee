@@ -44,6 +44,7 @@ export function checkout(value) {
       'table_id',
       'customer_name',
       'phone',
+      'address',
       'notes',
       'payment_method',
       'quote_hash',
@@ -60,14 +61,16 @@ export function checkout(value) {
   uuid(value.branch_id);
   if (
     !['web', 'cashier'].includes(value.source) ||
-    !['dine_in', 'takeaway', 'counter'].includes(value.fulfillment) ||
+    !['dine_in', 'takeaway', 'counter', 'delivery'].includes(
+      value.fulfillment,
+    ) ||
     !['cash', 'instapay', 'card'].includes(value.payment_method)
   )
     throw new Error('INVALID_ORDER');
   if (
     (value.source === 'web' &&
       (!['cash', 'instapay'].includes(value.payment_method) ||
-        !['dine_in', 'takeaway'].includes(value.fulfillment))) ||
+        !['dine_in', 'takeaway', 'delivery'].includes(value.fulfillment))) ||
     (value.source === 'cashier' &&
       (!['cash', 'card'].includes(value.payment_method) ||
         !['counter', 'takeaway'].includes(value.fulfillment)))
@@ -88,6 +91,18 @@ export function checkout(value) {
   if ((value.source === 'web' || mobile) && !/^01[0125]\d{8}$/.test(mobile))
     throw new Error('INVALID_PHONE');
   value.phone = mobile;
+  if (value.fulfillment === 'delivery') {
+    if (
+      typeof value.address !== 'string' ||
+      value.address.trim().length < 5 ||
+      value.address.length > 300
+    )
+      throw new Error('INVALID_ADDRESS');
+    value.address = value.address.trim();
+  } else if (value.address !== undefined) {
+    text(value.address, 300);
+    if (value.address.trim()) throw new Error('INVALID_ADDRESS');
+  }
   text(value.notes ?? '', 500);
   if (
     value.quote_hash !== undefined &&

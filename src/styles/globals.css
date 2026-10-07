@@ -1878,6 +1878,12 @@ main:focus {
   opacity: 0.75;
 }
 
+.checkout-panel label [role='alert'],
+.checkout-panel label [role='alert'] span {
+  opacity: 1;
+  color: #b91c1c;
+}
+
 .checkout-panel input,
 .checkout-panel textarea {
   display: block;

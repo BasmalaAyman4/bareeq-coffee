@@ -14,7 +14,7 @@ export function CartPage({
   staff?: boolean;
 }) {
   const controller = useCheckout({ checkout, staff });
-  const { cart, order, pending, error } = controller;
+  const { cart, order, pending, error, busy } = controller;
   return (
     <div className="wrap page-content">
       <div className="page-heading">
@@ -29,14 +29,14 @@ export function CartPage({
               : 'Your Bareeq order.'}
         </h1>
       </div>
-      {error && (
+      {error && !order && (
         <p className="backend-notice" role="alert">
           {error.replaceAll('_', ' ')}
         </p>
       )}
-      {pending && !order ? (
+      {pending && !order && !busy ? (
         <ResumeOrder {...controller} />
-      ) : order ? (
+      ) : order || (busy && pending) ? (
         <OrderConfirmation {...controller} />
       ) : !cart.length ? (
         <div className="empty-state">

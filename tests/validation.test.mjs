@@ -19,6 +19,53 @@ const order = () => ({
 });
 test('valid identifier-only order is accepted', () =>
   assert.equal(checkout(order()).items.length, 1));
+test('delivery requires a full address and accepts a trimmed address', () => {
+  for (const address of [
+    undefined,
+    '',
+    '   ',
+    'abc',
+    'x'.repeat(301),
+    123,
+    {},
+  ]) {
+    assert.throws(
+      () => checkout({ ...order(), fulfillment: 'delivery', address }),
+      /INVALID_ADDRESS/,
+    );
+  }
+  assert.equal(
+    checkout({
+      ...order(),
+      fulfillment: 'delivery',
+      address: '  10 Test Street, apartment 2  ',
+    }).address,
+    '10 Test Street, apartment 2',
+  );
+});
+test('collection does not require an address and cashier cannot submit delivery', () => {
+  assert.doesNotThrow(() => checkout(order()));
+  assert.throws(
+    () =>
+      checkout({
+        ...order(),
+        source: 'cashier',
+        fulfillment: 'delivery',
+        address: '10 Test Street',
+      }),
+    /INVALID_PAYMENT_METHOD/,
+  );
+});
+for (const field of [
+  'delivery_minor',
+  'items_minor',
+  'shipping_fee',
+  'delivery_fee',
+  'delivery_address',
+])
+  test('reject client-controlled delivery pricing field ' + field, () =>
+    assert.throws(() => checkout({ ...order(), [field]: 0 }), /INVALID_FIELDS/),
+  );
 for (const phone of [
   '',
   '123',

@@ -29,7 +29,9 @@ export const cashierActionableOrder = (order: any) =>
   (order.payment_method === 'cash' || paymentStatus(order) === 'verified');
 export const orderTypeLabel = (order: any) =>
   order.source === 'web'
-    ? 'Online'
+    ? order.fulfillment === 'delivery'
+      ? 'Online · Delivery'
+      : 'Online'
     : order.source === 'cashier'
       ? 'Counter sale'
       : order.fulfillment === 'dine_in'

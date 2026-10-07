@@ -1,5 +1,6 @@
-import { money } from '@/lib/money';
 import Link from '@/router';
+import { useI18n } from '@/i18n/i18n-provider';
+import { OrderAmounts } from '@/features/orders/components/order-amounts';
 
 import type { Controller } from '@/features/checkout/hooks/use-checkout';
 export function OrderSummary({
@@ -13,6 +14,8 @@ export function OrderSummary({
   place,
   method,
   receiptFile,
+  deliveryMinor,
+  estimatedTotal,
 }: Pick<
   Controller,
   | 'checkout'
@@ -25,27 +28,37 @@ export function OrderSummary({
   | 'place'
   | 'method'
   | 'receiptFile'
+  | 'deliveryMinor'
+  | 'estimatedTotal'
 >) {
+  const { isArabic } = useI18n();
   return (
     <aside className="order-summary">
-      <h2>Order summary</h2>
+      <h2>{isArabic ? 'ملخص الطلب' : 'Order summary'}</h2>
       <dl>
         <div>
-          <dt>Items</dt>
+          <dt>{isArabic ? 'عدد المنتجات' : 'Item count'}</dt>
           <dd>{cart.reduce((n, l) => n + l.quantity, 0)}</dd>
         </div>
-        <div>
-          <dt>{quote ? 'Confirmed current total' : 'Menu subtotal'}</dt>
-          <dd>{money(quote?.total_minor ?? subtotal)}</dd>
-        </div>
       </dl>
+      <OrderAmounts
+        itemsMinor={quote?.items_minor ?? subtotal}
+        deliveryMinor={quote?.delivery_minor ?? deliveryMinor}
+        totalMinor={quote?.total_minor ?? estimatedTotal}
+      />
       {quote ? (
         <>
           <p>
-            This total was calculated by Bareeq. Confirm to place your order.
+            {isArabic
+              ? 'تمت مراجعة الحساب. أكّد لإرسال طلبك.'
+              : 'This total was calculated by Bareeq. Confirm to place your order.'}
           </p>
           {method === 'instapay' && !receiptFile && (
-            <p>Upload your transfer receipt to place the order.</p>
+            <p>
+              {isArabic
+                ? 'ارفع إيصال التحويل لإرسال الطلب.'
+                : 'Upload your transfer receipt to place the order.'}
+            </p>
           )}
           <button
             className="button light"
@@ -54,13 +67,20 @@ export function OrderSummary({
             }
             onClick={place}
           >
-            {busy ? 'Placing order…' : 'Place order'}
+            {busy
+              ? isArabic
+                ? 'جاري إرسال الطلب…'
+                : 'Placing order…'
+              : isArabic
+                ? 'إرسال الطلب'
+                : 'Place order'}
           </button>
         </>
       ) : (
         <p>
-          We check the current prices and availability before you confirm.
-          Collection and dine-in only; no delivery fee.
+          {isArabic
+            ? 'بنراجع الأسعار والتوفر قبل تأكيد الطلب.'
+            : 'We check the current prices and availability before you confirm.'}
         </p>
       )}
       {!canOrder && (
