@@ -27,6 +27,32 @@ async function rpc(name: string, args: Record<string, unknown>) {
   if (error) throw new Error(error.message);
   return data;
 }
+function dispatchNotifications() {
+  // The committed outbox remains the source of truth if this wake-up fails.
+  EdgeRuntime.waitUntil(
+    (async () => {
+      try {
+        const runtime = await rpc('bareeq_runtime', {});
+        const response = await fetch(
+          Deno.env.get('SUPABASE_URL') + '/functions/v1/bareeq-worker',
+          {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: 'Bearer ' + runtime.worker_secret,
+            },
+            body: JSON.stringify({ mode: 'notifications' }),
+            signal: AbortSignal.timeout(20000),
+          },
+        );
+        if (!response.ok) throw new Error('DISPATCH_FAILED');
+        await response.body?.cancel();
+      } catch {
+        console.error('Notification wake-up failed; scheduled retry retained.');
+      }
+    })(),
+  );
+}
 async function staff(req: Request, founder = false, allowReset = false) {
   const bearer =
     req.headers.get('Authorization')?.replace(/^Bearer /, '') ?? '';
@@ -151,8 +177,10 @@ Deno.serve(async (req) => {
       const id = req.headers.get('x-order-id') ?? '',
         secret = req.headers.get('x-order-token') ?? '';
       const order = await readOrder(id, secret);
-      if (order.status === 'awaiting_payment_verification')
+      if (order.status === 'awaiting_payment_verification') {
+        dispatchNotifications();
         return Response.json(order, { headers });
+      }
       if (order.status !== 'awaiting_receipt')
         throw new Error('INVALID_TRANSITION');
       // Re-encode instead of storing filenames, metadata or untrusted image payloads.
@@ -175,6 +203,7 @@ Deno.serve(async (req) => {
         await db.storage.from('receipts').remove([path]);
         throw e;
       }
+      dispatchNotifications();
       return Response.json(await readOrder(id, secret), { headers });
     }
     const bodyReader = req.body!.getReader();

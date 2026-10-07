@@ -4,6 +4,153 @@ import fs from 'node:fs';
 import vm from 'node:vm';
 import ts from 'typescript';
 
+function workerFixture({ fail = false } = {}) {
+  const calls = [];
+  let handler,
+    claimed = false;
+  const events = [
+    { id: 1, order_id: 'order-1', audience: 'founder' },
+    { id: 2, order_id: 'order-2', audience: 'cashier' },
+  ];
+  const db = {
+    async rpc(name) {
+      calls.push(name);
+      if (name === 'bareeq_runtime')
+        return {
+          data: {
+            worker_secret: 'test',
+            vapid_public: 'public',
+            vapid_private: 'private',
+          },
+        };
+      if (name === 'bareeq_cleanup_candidates') return { data: [] };
+      if (name === 'bareeq_claim_notifications') {
+        const data = claimed ? [] : events;
+        claimed = true;
+        return { data };
+      }
+      throw new Error(name);
+    },
+    from(table) {
+      const query = {
+        select() {
+          return query;
+        },
+        eq() {
+          return query;
+        },
+        in() {
+          return query;
+        },
+        update(value) {
+          calls.push(['delivered', value]);
+          return query;
+        },
+        then(resolve) {
+          return Promise.resolve({
+            data:
+              table === 'staff_roles'
+                ? [{ user_id: 'staff' }]
+                : [{ id: 'sub', subscription: {} }],
+          }).then(resolve);
+        },
+      };
+      return query;
+    },
+  };
+  const source = fs
+    .readFileSync('supabase/functions/bareeq-worker/index.ts', 'utf8')
+    .replace(/^import .*;\r?\n/gm, '');
+  vm.runInNewContext(ts.transpile(source, { target: ts.ScriptTarget.ES2022 }), {
+    createClient: () => db,
+    Deno: {
+      env: { get() {} },
+      serve: (fn) => {
+        handler = fn;
+      },
+    },
+    Response,
+    console,
+    webpush: {
+      setVapidDetails() {},
+      async sendNotification(_, payload) {
+        calls.push(['push', JSON.parse(payload)]);
+        if (fail) throw new Error('provider unavailable');
+      },
+    },
+  });
+  const run = (body = {}, auth = 'Bearer test') =>
+    handler(
+      new Request('https://worker.test', {
+        method: 'POST',
+        headers: { Authorization: auth, 'Content-Type': 'application/json' },
+        body: JSON.stringify(body),
+      }),
+    );
+  return { calls, run };
+}
+
+test('immediate worker skips cleanup and concurrent scheduled run cannot claim the same events', async () => {
+  const f = workerFixture();
+  const first = await f.run({ mode: 'notifications' });
+  assert.equal(first.status, 200);
+  assert.equal(f.calls.includes('bareeq_cleanup_candidates'), false);
+  await Promise.all([f.run(), f.run({ mode: 'notifications' })]);
+  const pushes = f.calls.filter((c) => c[0] === 'push');
+  assert.equal(pushes.length, 2);
+  assert.equal(pushes[0][1].url, '/founder?order=order-1');
+  assert.equal(pushes[1][1].url, '/cashier?order=order-2');
+  assert.ok(f.calls.includes('bareeq_cleanup_candidates'));
+});
+
+test('provider failure retains events for scheduled retry', async () => {
+  const f = workerFixture({ fail: true });
+  assert.equal((await f.run({ mode: 'notifications' })).status, 200);
+  assert.equal(f.calls.filter((c) => c[0] === 'delivered').length, 0);
+});
+
+test('notification-only mode remains authenticated', async () => {
+  const f = workerFixture();
+  assert.equal(
+    (await f.run({ mode: 'notifications' }, 'Bearer wrong')).status,
+    403,
+  );
+  assert.equal(f.calls.includes('bareeq_claim_notifications'), false);
+});
+
+test('wake-up is background work and network failure does not reject checkout', async () => {
+  const source = fs.readFileSync(
+    'supabase/functions/bareeq-api/index.ts',
+    'utf8',
+  );
+  const helper = source.slice(
+    source.indexOf('function dispatchNotifications()'),
+    source.indexOf('async function staff('),
+  );
+  let background;
+  const calls = [];
+  const context = vm.createContext({
+    EdgeRuntime: {
+      waitUntil(p) {
+        background = p;
+      },
+    },
+    rpc: async () => ({ worker_secret: 'test' }),
+    Deno: { env: { get: () => 'https://test.supabase.co' } },
+    AbortSignal,
+    console: { error: () => calls.push('retry retained') },
+    fetch: async (_, options) => {
+      calls.push(JSON.parse(options.body));
+      throw new Error('offline');
+    },
+  });
+  vm.runInContext(ts.transpile(helper), context);
+  assert.equal(vm.runInContext('dispatchNotifications()', context), undefined);
+  await background;
+  assert.equal(calls[0].mode, 'notifications');
+  assert.equal(calls[1], 'retry retained');
+});
+
 for (const scope of [
   'https://example.com/',
   'https://example.com/bareeq-coffee/',

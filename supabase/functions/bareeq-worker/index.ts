@@ -18,9 +18,14 @@ Deno.serve(async (req) => {
     )
       return Response.json({ error: 'FORBIDDEN' }, { status: 403 });
     const body = await req.json();
+    if (body.mode !== undefined && body.mode !== 'notifications')
+      return Response.json({ error: 'INVALID_MODE' }, { status: 400 });
     let deleted = 0,
       delivered = 0;
-    const expired = await checked(await db.rpc('bareeq_cleanup_candidates'));
+    const expired =
+      body.mode === 'notifications'
+        ? []
+        : await checked(await db.rpc('bareeq_cleanup_candidates'));
     for (const receipt of expired) {
       const r = await db.storage.from('receipts').remove([receipt.path]);
       if (r.error) continue;
