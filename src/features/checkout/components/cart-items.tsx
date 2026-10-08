@@ -1,3 +1,6 @@
+import { useCopy } from '@/i18n/i18n-provider';
+import { useI18n } from '@/i18n/i18n-provider';
+import { catalogLabel } from '@/i18n/catalog-label';
 import { Quantity } from '@/components/ui/quantity';
 import { Picture } from '@/features/catalog/components/product-image';
 import { Trash2 } from 'lucide-react';
@@ -8,6 +11,9 @@ export function CartItems({
   setQuote,
   lines,
 }: Pick<Controller, 'quantity' | 'setQuote' | 'lines'>) {
+  const tr = useCopy();
+  const { language } = useI18n();
+
   return (
     <div className="cart-items">
       {lines.map((l) => (
@@ -18,12 +24,19 @@ export function CartItems({
             </div>
           )}
           <div className="cart-item-name">
-            <h2>{l.product?.name ?? 'Unavailable item'}</h2>
+            <h2>
+              {l.product
+                ? catalogLabel(l.product, language)
+                : tr('Unavailable item')}
+            </h2>
             <p>
-              {l.product?.variants.find((v) => v.id === l.variant_id)?.name}{' '}
+              {tr(
+                l.product?.variants.find((v) => v.id === l.variant_id)?.name ??
+                  '',
+              )}{' '}
               {l.product?.modifiers
                 .filter((m) => l.modifier_ids.includes(m.id))
-                .map((m) => m.name)
+                .map((m) => catalogLabel(m, language))
                 .join(', ')}
             </p>
             <button
@@ -33,7 +46,7 @@ export function CartItems({
                 setQuote(null);
               }}
             >
-              <Trash2 size={14} /> Remove
+              <Trash2 size={14} /> {tr('Remove')}
             </button>
           </div>
           <Quantity

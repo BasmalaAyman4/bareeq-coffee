@@ -1,3 +1,4 @@
+import { useCopy } from '@/i18n/i18n-provider';
 import { Button } from '@/components/ui/button';
 import { Quantity } from '@/components/ui/quantity';
 import { useCart } from '@/features/cart/hooks/use-cart';
@@ -12,6 +13,8 @@ import { useState } from 'react';
 import { useI18n } from '@/i18n/i18n-provider';
 import { catalogLabel } from '@/i18n/catalog-label';
 export function ProductPage({ product }: { product: Product }) {
+  const tr = useCopy();
+
   const products = useProducts();
   const [q, setQ] = useState(1);
   const [variant, setVariant] = useState(
@@ -23,13 +26,13 @@ export function ProductPage({ product }: { product: Product }) {
   const name = catalogLabel(product, language);
   return (
     <div className="wrap page-content">
-      <nav className="breadcrumb" aria-label="Breadcrumb">
+      <nav className="breadcrumb" aria-label={tr('Breadcrumb')}>
         <Link href="/menu">{t('menu')}</Link>
         <span>/</span>
         <Link href={'/menu?category=' + encodeURIComponent(product.category)}>
           {language === 'ar' && product.category_ar
             ? product.category_ar
-            : product.category}
+            : tr(product.category)}
         </Link>
         <span>/</span>
         <span>{name}</span>
@@ -42,10 +45,10 @@ export function ProductPage({ product }: { product: Product }) {
           <p className="eyebrow">
             {language === 'ar' && product.category_ar
               ? product.category_ar
-              : product.category}
+              : tr(product.category)}
           </p>
           <h1>{name}</h1>
-          <p className="detail-price">{price(product.price)}</p>
+          <p className="detail-price">{tr(price(product.price))}</p>
           {product.description && (
             <p className="product-description">
               {language === 'ar' && product.description_ar
@@ -56,22 +59,23 @@ export function ProductPage({ product }: { product: Product }) {
           {product.id === 'La5EfigDxNwOuGZdhrp1' && (
             <div className="ingredient-list">
               <div>
-                <h3>Cream</h3>
-                <p>Smooth and rich cream for the perfect taste.</p>
+                <h3>{tr('Cream')}</h3>
+                <p>{tr('Smooth and rich cream for the perfect taste.')}</p>
               </div>
               <div>
-                <h3>Nuts</h3>
-                <p>Crunchy nuts that add texture and flavor.</p>
+                <h3>{tr('Nuts')}</h3>
+                <p>{tr('Crunchy nuts that add texture and flavor.')}</p>
               </div>
               <div>
-                <h3>Carrot cake</h3>
-                <p>Moist and spiced carrot cake.</p>
+                <h3>{tr('Carrot cake')}</h3>
+                <p>{tr('Moist and spiced carrot cake.')}</p>
               </div>
             </div>
           )}
           <p className="allergen-note">
-            Have an allergy or dietary requirement? Check ingredients with the
-            café before ordering.
+            {tr(
+              'Have an allergy or dietary requirement? Check ingredients with the café before ordering.',
+            )}
           </p>
           <div className="product-order">
             {product.variants.length > 0 && (
@@ -86,7 +90,7 @@ export function ProductPage({ product }: { product: Product }) {
                     .map((v) => (
                       <option key={v.id} value={v.id}>
                         {catalogLabel(v, language)} ·{' '}
-                        {price(v.price_minor / 100)}
+                        {tr(price(v.price_minor / 100))}
                       </option>
                     ))}
                 </select>
@@ -107,7 +111,7 @@ export function ProductPage({ product }: { product: Product }) {
                       )
                     }
                   />
-                  {catalogLabel(m, language)} +{price(m.price_minor / 100)}
+                  {catalogLabel(m, language)} +{tr(price(m.price_minor / 100))}
                 </label>
               ))}
             <Quantity value={q} onChange={setQ} />
@@ -125,19 +129,21 @@ export function ProductPage({ product }: { product: Product }) {
             </Button>
           </div>
           {product.illustrative && (
-            <p className="small-note">Illustrative drink image.</p>
+            <p className="small-note">{tr('Illustrative drink image.')}</p>
           )}
           <p className="small-note">
-            Prices shown as published. Confirm currency and availability with
-            Bareeq.
+            {tr(
+              'Prices shown as published. Confirm currency and availability with Bareeq.',
+            )}
           </p>
         </div>
       </div>
       <div className="section">
         <div className="section-heading">
-          <h2>A little more Bareeq.</h2>
+          <h2>{tr('A little more Bareeq.')}</h2>
           <Link className="text-link" href="/menu">
-            Back to menu <ArrowUpRight size={18} />
+            {tr('Back to menu')}
+            <ArrowUpRight size={18} />
           </Link>
         </div>
         <div className="product-grid">

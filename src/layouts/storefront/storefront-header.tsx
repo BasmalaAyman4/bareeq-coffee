@@ -1,3 +1,4 @@
+import { useCopy } from '@/i18n/i18n-provider';
 import { Brand } from '@/components/brand';
 import Link from '@/router';
 import { ArrowUpRight, ShoppingBag } from 'lucide-react';
@@ -11,14 +12,16 @@ export function StorefrontHeader({
   path: string;
   count: number;
 }) {
+  const tr = useCopy();
+
   const { t } = useI18n();
   return (
     <header className="site-header wrap">
-      <Link href="/" className="brand-link" aria-label="Bareeq home">
+      <Link href="/" className="brand-link" aria-label={tr('Bareeq home')}>
         <Brand />
       </Link>
       <nav
-        aria-label="Main navigation"
+        aria-label={tr('Main navigation')}
         className="main-nav"
         id="main-navigation"
       >

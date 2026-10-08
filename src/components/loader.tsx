@@ -1,4 +1,5 @@
-'use client';
+import { useCopy } from '@/i18n/i18n-provider';
+('use client');
 import {
   useCallback,
   useEffect,
@@ -17,6 +18,8 @@ const mix = (a: number, b: number, p: number) => a + (b - a) * p;
 const ease = (p: number) => 1 - Math.pow(1 - p, 3);
 
 export function Loader() {
+  const tr = useCopy();
+
   const [active, setActive] = useState(false);
   const skip = useRef<HTMLButtonElement>(null);
   const layer = useRef<HTMLDivElement>(null);
@@ -324,7 +327,7 @@ export function Loader() {
       className="bareeq-loader"
       role="dialog"
       aria-modal="true"
-      aria-label="Welcome to Bareeq"
+      aria-label={tr('Welcome to Bareeq')}
       onKeyDown={(e) => {
         if (e.key === 'Escape') finish();
         if (e.key === 'Tab') {

@@ -39,7 +39,7 @@ export function useOrders(allowed: boolean, userId: string | undefined) {
     return () => {
       supabase.removeChannel(channel);
     };
-  }, [!!allowed, client]);
+  }, [!!allowed, userId, client]);
 
   return { orders, connection };
 }

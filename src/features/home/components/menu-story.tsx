@@ -1,3 +1,4 @@
+import { useCopy } from '@/i18n/i18n-provider';
 import Link from '@/router';
 import { ArrowUpRight } from 'lucide-react';
 const categories = [
@@ -8,19 +9,22 @@ const categories = [
 ];
 
 export function MenuStory({}: {}) {
+  const tr = useCopy();
+
   return (
     <section className="wrap section menu-story">
       <div className="section-heading">
         <div>
-          <p className="eyebrow">Explore our menu</p>
+          <p className="eyebrow">{tr('Explore our menu')}</p>
           <h2>
-            Your favourites,
+            {tr('Your favourites,')}
             <br />
-            brighter.
+            {tr('brighter.')}
           </h2>
         </div>
         <Link className="text-link" href="/menu">
-          View all menu <ArrowUpRight size={18} />
+          {tr('View all menu')}
+          <ArrowUpRight size={18} />
         </Link>
       </div>
       <div className="category-grid">
@@ -28,17 +32,17 @@ export function MenuStory({}: {}) {
           <Link
             className="category-card"
             href={'/menu?category=' + encodeURIComponent(name)}
-            key={name}
+            key={tr(name)}
           >
             <img
               src={'/assets/' + image + '.webp'}
-              alt={name}
+              alt={tr(name)}
               width="600"
               height="600"
               loading="lazy"
             />
             <span>
-              {name}
+              {tr(name)}
               <ArrowUpRight size={20} />
             </span>
           </Link>

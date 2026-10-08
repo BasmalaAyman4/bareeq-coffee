@@ -1,3 +1,4 @@
+import { useCopy } from '@/i18n/i18n-provider';
 import { Dialog } from '@/components/ui/modal';
 import { nextStatus } from '@/features/orders/order-display';
 import { money } from '@/lib/money';
@@ -28,6 +29,8 @@ export function OrderDetailsModal({
   | 'run'
   | 'transition'
 >) {
+  const tr = useCopy();
+
   const { t, isArabic } = useI18n();
   return (
     <Dialog
@@ -41,11 +44,14 @@ export function OrderDetailsModal({
     >
       {selected && (
         <>
-          <p className="eyebrow">Order #{selected.number}</p>
+          <p className="eyebrow">
+            {tr('Order #')}
+            {selected.number}
+          </p>
           <h2>{selected.customer_name}</h2>
           <p>
-            {selected.phone} · {selected.source} ·{' '}
-            {selected.fulfillment.replace('_', ' ')}
+            <bdi>{selected.phone}</bdi> · {tr(selected.source)} ·{' '}
+            {tr(selected.fulfillment.replace('_', ' '))}
           </p>
           <p>{selected.notes}</p>
           {selected.fulfillment === 'delivery' && (
@@ -57,12 +63,14 @@ export function OrderDetailsModal({
           {selected.order_items.map((i: any) => (
             <div className="staff-line" key={i.id}>
               <span>
-                {i.quantity} × {i.product_name} {i.variant_name}
+                {i.quantity} × {tr(i.product_name)} {tr(i.variant_name ?? '')}
                 <small>
-                  {i.order_item_modifiers.map((m: any) => m.name).join(', ')}
+                  {i.order_item_modifiers
+                    .map((m: any) => tr(m.name))
+                    .join(', ')}
                 </small>
               </span>
-              <strong>{money(i.line_minor)}</strong>
+              <strong>{tr(money(i.line_minor))}</strong>
             </div>
           ))}
           <OrderAmounts
@@ -70,7 +78,7 @@ export function OrderDetailsModal({
             deliveryMinor={selected.delivery_minor ?? 0}
             totalMinor={selected.total_minor}
           />
-          <p>{selected.status.replaceAll('_', ' ')}</p>
+          <p>{tr(selected.status.replaceAll('_', ' '))}</p>
           {founder && selected.payment_method === 'instapay' && (
             <>
               <button
@@ -88,21 +96,21 @@ export function OrderDetailsModal({
                   })
                 }
               >
-                {t('view')} receipt
+                {t('view')} {tr('receipt')}
               </button>
               {receipt && (
                 <img
                   className="receipt-image"
                   src={receipt}
-                  alt="Customer payment receipt"
+                  alt={tr('Customer payment receipt')}
                 />
               )}
               {selected.status === 'awaiting_payment_verification' && (
                 <>
                   <p className="verification-note">
-                    Verify the actual incoming transfer for{' '}
-                    {money(selected.total_minor)} before confirming. A
-                    screenshot is evidence only.
+                    {tr('Verify the actual incoming transfer for')}{' '}
+                    {tr(money(selected.total_minor))}{' '}
+                    {tr('before confirming. A screenshot is evidence only.')}
                   </p>
                   <div className="staff-actions">
                     <button
@@ -137,7 +145,7 @@ export function OrderDetailsModal({
                 >
                   {nextStatus[selected.status] === 'completed'
                     ? t('completed')
-                    : nextStatus[selected.status]}
+                    : tr(nextStatus[selected.status])}
                 </button>
                 <button
                   disabled={busy}

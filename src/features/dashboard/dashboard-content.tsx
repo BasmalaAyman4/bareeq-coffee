@@ -12,9 +12,16 @@ export function DashboardContent({
   controller: DashboardController;
 }) {
   const { view, founder } = controller;
+  if (!founder)
+    return (
+      <>
+        <div hidden={view !== 'counter'}>
+          <CounterOrder />
+        </div>
+        {view === 'orders' && <OrdersTable {...controller} />}
+      </>
+    );
   if (view === 'orders') return <OrdersTable {...controller} />;
-  if (view === 'counter') return <CounterOrder />;
-  if (!founder) return null;
   switch (view) {
     case 'password':
       return <PasswordForm founder />;
@@ -23,7 +30,12 @@ export function DashboardContent({
     case 'menu':
       return <MenuEditor />;
     case 'settings':
-      return <Settings />;
+      return (
+        <div className="dashboard-settings">
+          <Settings />
+          <PasswordForm founder />
+        </div>
+      );
     default:
       return null;
   }

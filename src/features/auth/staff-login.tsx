@@ -1,3 +1,4 @@
+import { useCopy } from '@/i18n/i18n-provider';
 import { UIButton } from '@/components/ui/button';
 import { Field } from '@/components/ui/field';
 import { TextInput } from '@/components/ui/input';
@@ -36,6 +37,8 @@ export function StaffLogin({
   | 'identity'
   | 'run'
 >) {
+  const tr = useCopy();
+
   const { t } = useI18n();
   return (
     <main className="staff-login !grid !min-h-screen !max-w-none !place-items-center !bg-bareeq-cream/55 !p-5 sm:!p-8">
@@ -50,23 +53,27 @@ export function StaffLogin({
           <img
             className="!m-0 !mb-4 !inline-block !size-20 object-contain drop-shadow-md"
             src="/assets/bareeq-logo.png"
-            alt="Bareeq"
+            alt={tr('Bareeq')}
           />
           <p className="mb-2 text-[11px] font-bold uppercase tracking-[0.18em] text-bareeq-gold">
-            Bareeq{' '}
-            {founder === null ? 'Staff' : founder ? 'Founder' : 'Cashier'}
+            {tr('Bareeq')}{' '}
+            {founder === null
+              ? 'Staff'
+              : founder
+                ? tr('Founder')
+                : tr('Cashier')}
           </p>
           <h1 className="!mb-2 !text-3xl !leading-tight !text-bareeq-espresso sm:!text-4xl">
             {t('welcomeBack')}
           </h1>
           <p className="m-0 text-sm leading-6 text-bareeq-espresso/60">
-            Sign in to open your{' '}
+            {tr('Sign in to open your')}{' '}
             {founder === null
               ? 'café'
               : founder
                 ? 'café management'
                 : 'counter'}{' '}
-            workspace.
+            {tr('workspace.')}
           </p>
         </div>
         {session ? (
@@ -130,7 +137,9 @@ export function StaffLogin({
                 <button
                   className="absolute right-2 top-1/4 grid size-8 -translate-y-1/2 place-items-center rounded-lg border-0 bg-transparent text-bareeq-espresso/45 transition hover:bg-bareeq-blush/50 hover:text-bareeq-burgundy focus:outline-none focus:ring-2 focus:ring-bareeq-burgundy/20"
                   type="button"
-                  aria-label={showPassword ? 'Hide password' : 'Show password'}
+                  aria-label={
+                    showPassword ? tr('Hide password') : tr('Show password')
+                  }
                   onClick={() => setShowPassword((visible) => !visible)}
                 >
                   {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}

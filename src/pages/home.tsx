@@ -1,3 +1,4 @@
+import { useCopy } from '@/i18n/i18n-provider';
 import { CoffeeStory } from '@/features/home/components/coffee-story';
 import { FeaturedCategories } from '@/features/home/components/featured-categories';
 import { Hero } from '@/features/home/components/hero';
@@ -7,6 +8,8 @@ import { useMenuStory } from '@/features/home/use-menu-story';
 import { Bean, Coffee, Sparkles } from 'lucide-react';
 
 export function Home() {
+  const tr = useCopy();
+
   useMenuStory();
   return (
     <>
@@ -14,18 +17,19 @@ export function Home() {
       <div className="values wrap">
         <span>
           <Bean />
-          Premium coffee beans
+          {tr('Premium coffee beans')}
         </span>
         <span>
           <Coffee />
-          Unique flavors
+          {tr('Unique flavors')}
         </span>
         <span>
-          <Sparkles />A touch of Bareeq
+          <Sparkles />
+          {tr('A touch of Bareeq')}
         </span>
         <span>
           <Coffee />
-          Refreshing every day
+          {tr('Refreshing every day')}
         </span>
       </div>
       <MenuStory />

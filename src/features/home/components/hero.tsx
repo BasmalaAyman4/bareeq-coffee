@@ -1,15 +1,18 @@
+import { useCopy } from '@/i18n/i18n-provider';
 import Link from '@/router';
 import { ArrowUpRight } from 'lucide-react';
 
 export function Hero({}: {}) {
+  const tr = useCopy();
+
   return (
     <section className="hero hero-sculpture wrap" aria-labelledby="hero-title">
       <div className="hero-headline">
-        <p className="eyebrow">More than coffee</p>
+        <p className="eyebrow">{tr('More than coffee')}</p>
         <h1 id="hero-title">
-          <span className="hero-pretitle">A Brighter</span>
-          <span className="hero-coffee-word">Coffee</span>
-          <span className="hero-experience-word">Experience</span>
+          <span className="hero-pretitle">{tr('A Brighter')}</span>
+          <span className="hero-coffee-word">{tr('Coffee')}</span>
+          <span className="hero-experience-word">{tr('Experience')}</span>
         </h1>
       </div>
       <div className="hero-cup-scene" aria-hidden="true">
@@ -47,18 +50,19 @@ export function Hero({}: {}) {
       </div>
       <div className="hero-bottom-copy">
         <p>
-          Specialty coffee, crafted with care
+          {tr('Specialty coffee, crafted with care')}
           <br />
-          and a touch of Bareeq.
+          {tr('and a touch of Bareeq.')}
         </p>
         <Link className="button" href="/menu">
-          Order now <ArrowUpRight size={18} />
+          {tr('Order now')}
+          <ArrowUpRight size={18} />
         </Link>
       </div>
       <p className="hero-signature">
-        A shine
+        {tr('A shine')}
         <br />
-        in every sip.
+        {tr('in every sip.')}
       </p>
     </section>
   );

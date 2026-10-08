@@ -148,6 +148,16 @@ export function useNotifications(allowed: boolean, userId?: string) {
     );
   }, [allowed, userId, subscribe]);
 
+  useEffect(() => {
+    if (!allowed) return;
+    const reconnect = () => {
+      if (supported() && Notification.permission === 'granted')
+        void subscribe().catch(() => setPushReady(false));
+    };
+    window.addEventListener('online', reconnect);
+    return () => window.removeEventListener('online', reconnect);
+  }, [allowed, subscribe]);
+
   useEffect(
     () => () => {
       const context = audio.current;

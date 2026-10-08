@@ -1,3 +1,4 @@
+import { useCopy } from '@/i18n/i18n-provider';
 import { Button } from '@/components/ui/button';
 import { useCart } from '@/features/cart/hooks/use-cart';
 import { Picture } from '@/features/catalog/components/product-image';
@@ -8,6 +9,8 @@ import { Plus } from 'lucide-react';
 import { useI18n } from '@/i18n/i18n-provider';
 import { catalogLabel } from '@/i18n/catalog-label';
 export function ProductCard({ product }: { product: Product }) {
+const tr = useCopy();
+
   const { add } = useCart();
   const { language, t } = useI18n();
   const name = catalogLabel(product, language);
@@ -26,7 +29,7 @@ export function ProductCard({ product }: { product: Product }) {
           <h3>{name}</h3>
         </Link>
         <div>
-          <span className="price">{price(product.price)}</span>
+          <span className="price">{tr(price(product.price))}</span>
           <Button
             className="icon-button add-button"
             aria-label={`${t('addToOrder')} ${name}`}

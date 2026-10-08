@@ -1,3 +1,4 @@
+import { useCopy } from '@/i18n/i18n-provider';
 import { UIButton } from '@/components/ui/button';
 import { PasswordForm } from '@/features/auth/password-form';
 import { StaffLogin } from '@/features/auth/staff-login';
@@ -10,6 +11,8 @@ import { DashboardHeader } from './layout/dashboard-header';
 import { DashboardLayout } from './layout/dashboard-layout';
 import { DashboardSidebar } from './layout/dashboard-sidebar';
 export function Dashboard({ roleHint = null }: { roleHint?: boolean | null }) {
+  const tr = useCopy();
+
   const controller = useDashboard(roleHint);
   const {
     founder,
@@ -25,38 +28,44 @@ export function Dashboard({ roleHint = null }: { roleHint?: boolean | null }) {
   if (session && identity.data?.changeRequired && !founder)
     return (
       <main className="staff-login">
-        <h1>Cashier access is managed by Founder.</h1>
+        <h1>{tr('Cashier access is managed by Founder.')}</h1>
         <p>
-          Ask the Founder to set or reset the Cashier password. This workspace
-          does not provide password-management access.
+          {tr(
+            'Ask the Founder to set or reset the Cashier password. This workspace does not provide password-management access.',
+          )}
         </p>
-        <UIButton onClick={() => supabase.auth.signOut()}>Sign out</UIButton>
+        <UIButton onClick={() => supabase.auth.signOut()}>
+          {tr('Sign out')}
+        </UIButton>
       </main>
     );
   if (session && identity.data?.changeRequired)
     return (
       <main className="staff-login">
-        <h1>Choose your password.</h1>
-        <p>Replace your temporary password before opening the dashboard.</p>
+        <h1>{tr('Choose your password.')}</h1>
+        <p>
+          {tr('Replace your temporary password before opening the dashboard.')}
+        </p>
         <PasswordForm founder forced />
       </main>
     );
   if (!session || !allowed) return <StaffLogin {...controller} />;
   return (
     <DashboardLayout
+      founder={founder}
       sidebar={<DashboardSidebar {...controller} />}
       header={<DashboardHeader {...controller} />}
       modal={<OrderDetailsModal {...controller} />}
     >
       {error && (
         <p role="alert" className="backend-notice">
-          {error.replaceAll('_', ' ')}
+          {tr(error.replaceAll('_', ' '))}
         </p>
       )}
       {alert && (
         <div className="staff-alert mb-3" role="status">
           {alert}
-          <UIButton onClick={() => setAlert('')}>Dismiss</UIButton>
+          <UIButton onClick={() => setAlert('')}>{tr('Dismiss')}</UIButton>
         </div>
       )}
       <DashboardContent controller={controller} />

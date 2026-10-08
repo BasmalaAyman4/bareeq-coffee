@@ -1,4 +1,7 @@
+import { useCopy } from '@/i18n/i18n-provider';
 export function StaffLoading({ founder }: { founder: boolean | null }) {
+  const tr = useCopy();
+
   return (
     <main className="grid min-h-screen place-items-center bg-bareeq-cream/55 p-5">
       <section
@@ -9,15 +12,20 @@ export function StaffLoading({ founder }: { founder: boolean | null }) {
         <img
           className="mb-5 size-16 object-contain drop-shadow-md"
           src="/assets/bareeq-logo.png"
-          alt="Bareeq"
+          alt={tr('Bareeq')}
         />
         <span className="mb-4 size-6 animate-spin rounded-full border-2 border-bareeq-burgundy/20 border-t-bareeq-burgundy" />
         <strong className="text-bareeq-espresso">
-          Opening {founder === null ? 'staff' : founder ? 'Founder' : 'Cashier'}{' '}
-          workspace
+          {tr('Opening')}{' '}
+          {founder === null
+            ? tr('staff')
+            : founder
+              ? tr('Founder')
+              : tr('Cashier')}{' '}
+          {tr('workspace')}
         </strong>
         <p className="mt-2 text-sm text-bareeq-espresso/60">
-          Checking your secure session…
+          {tr('Checking your secure session…')}
         </p>
       </section>
     </main>

@@ -1,3 +1,4 @@
+import { useCopy } from '@/i18n/i18n-provider';
 import { UIButton } from '@/components/ui/button';
 import { StatusBadge } from '@/components/ui/status-badge';
 import { unitPrice } from '@/features/counter/model';
@@ -29,6 +30,8 @@ export function CounterCart({
   | 'setQuantity'
   | 'createOrder'
 >) {
+  const tr = useCopy();
+
   const { t, language } = useI18n();
   return (
     <aside className="flex min-h-[34rem] flex-col overflow-hidden rounded-3xl border border-bareeq-espresso/10 bg-bareeq-ivory shadow-sm xl:h-[calc(100vh-17rem)] xl:max-h-[calc(100vh-17rem)] xl:min-h-0 xl:self-start">
@@ -68,7 +71,7 @@ export function CounterCart({
                 </p>
               </div>
               <strong className="text-sm">
-                {money(unitPrice(line) * line.quantity)}
+                {tr(money(unitPrice(line) * line.quantity))}
               </strong>
             </div>
             <div className="mt-3 flex items-center justify-between">
@@ -128,7 +131,7 @@ export function CounterCart({
         <div className="mt-4 flex items-end justify-between">
           <span className="text-sm text-bareeq-espresso/65">{t('total')}</span>
           <strong className="text-2xl text-bareeq-burgundy">
-            {money(total)}
+            {tr(money(total))}
           </strong>
         </div>
         <UIButton
@@ -137,7 +140,8 @@ export function CounterCart({
           loading={busy}
           onClick={createOrder}
         >
-          Pay {money(total)}
+          {tr('Pay')}
+          {tr(money(total))}
         </UIButton>
         {message && (
           <p

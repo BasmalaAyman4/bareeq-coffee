@@ -1,3 +1,4 @@
+import { useCopy } from '@/i18n/i18n-provider';
 import Link from '@/router';
 import { Coffee, House, MapPin, ShoppingBag } from 'lucide-react';
 import { useI18n } from '@/i18n/i18n-provider';
@@ -8,6 +9,8 @@ export function MobileNavigation({
   activeTab: string;
   count: number;
 }) {
+  const tr = useCopy();
+
   const { t } = useI18n();
   const tabs = [
     { href: '/', label: t('home'), icon: House },
@@ -16,7 +19,7 @@ export function MobileNavigation({
     { href: '/cart', label: t('cart'), icon: ShoppingBag },
   ];
   return (
-    <nav className="mobile-nav" aria-label="Mobile navigation">
+    <nav className="mobile-nav" aria-label={tr('Mobile navigation')}>
       {tabs.map(({ href, label, icon: Icon }) => (
         <Link
           key={href}

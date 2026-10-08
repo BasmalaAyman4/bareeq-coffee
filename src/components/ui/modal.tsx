@@ -1,3 +1,4 @@
+import { useCopy } from '@/i18n/i18n-provider';
 import { useEffect, useId, type ReactNode } from 'react';
 import { createPortal } from 'react-dom';
 import { UIButton } from './button';
@@ -17,6 +18,8 @@ export function Dialog({
   footer,
   dismissible = true,
 }: DialogProps) {
+  const tr = useCopy();
+
   const titleId = useId();
   useEffect(() => {
     if (!open) return;
@@ -48,7 +51,7 @@ export function Dialog({
               tone="quiet"
               className="min-h-0 rounded-full p-2 text-xl leading-none border-none"
               onClick={onClose}
-              aria-label="Close dialog"
+              aria-label={tr('Close dialog')}
             >
               ×
             </UIButton>

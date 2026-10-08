@@ -1,6 +1,8 @@
 import { supabase } from '@/lib/supabase';
 import type { Branch, Product } from '@/types/catalog';
 import { useQuery } from '@tanstack/react-query';
+import { catalogArabic } from '@/i18n/catalog-copy';
+import { descriptionArabic } from '@/i18n/catalog-descriptions';
 export function useMenu() {
   return useQuery({
     queryKey: ['menu'],
@@ -22,9 +24,19 @@ export function useMenu() {
         if (r.error) throw r.error;
       const products: Product[] = (p.data ?? []).map((x) => ({
         ...x,
+        name_ar: x.name_ar?.trim() || catalogArabic[x.name] || '',
+        description_ar:
+          x.description_ar?.trim() ||
+          descriptionArabic[x.description?.replace(/\s+/g, ' ').trim()] ||
+          '',
         price: x.price_minor === null ? null : x.price_minor / 100,
         category: c.data!.find((a) => a.id === x.category_id)?.name ?? '',
-        category_ar: c.data!.find((a) => a.id === x.category_id)?.name_ar ?? '',
+        category_ar:
+          c.data!.find((a) => a.id === x.category_id)?.name_ar ||
+          catalogArabic[
+            c.data!.find((a) => a.id === x.category_id)?.name ?? ''
+          ] ||
+          '',
         sourceCategory: '',
         variants: v.data!.filter((a) => a.product_id === x.id),
         modifiers: m.data!.filter((a) =>

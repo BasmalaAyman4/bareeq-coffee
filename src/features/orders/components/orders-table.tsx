@@ -1,3 +1,4 @@
+import { useCopy } from '@/i18n/i18n-provider';
 import { UIButton } from '@/components/ui/button';
 import { TextInput } from '@/components/ui/input';
 import { Select } from '@/components/ui/select';
@@ -36,6 +37,8 @@ export function OrdersTable({
   | 'orders'
   | 'visible'
 >) {
+  const tr = useCopy();
+
   const { t } = useI18n();
   return (
     <>
@@ -87,8 +90,9 @@ export function OrdersTable({
       </section>
       {orders.isError && (
         <p role="alert">
-          Unable to refresh the queue. Previously loaded orders may be out of
-          date.
+          {tr(
+            'Unable to refresh the queue. Previously loaded orders may be out of date.',
+          )}
         </p>
       )}
       <DataTable
@@ -131,7 +135,7 @@ export function OrdersTable({
             header: t('source'),
             cell: (o: any) => (
               <div>
-                <strong className="block">{orderTypeLabel(o)}</strong>
+                <strong className="block">{tr(orderTypeLabel(o))}</strong>
                 <span className="text-xs text-bareeq-espresso/55">
                   {o.payment_method === 'cash'
                     ? t('cash')
@@ -155,14 +159,14 @@ export function OrdersTable({
             key: 'total',
             header: t('total'),
             align: 'end',
-            cell: (o: any) => <strong>{money(o.total_minor)}</strong>,
+            cell: (o: any) => <strong>{tr(money(o.total_minor))}</strong>,
           },
           {
             key: 'status',
             header: t('status'),
             cell: (o: any) => (
               <StatusBadge tone={statusTone(o.status, o)}>
-                {statusLabel(o.status, o)}
+                {tr(statusLabel(o.status, o))}
               </StatusBadge>
             ),
           },
@@ -189,8 +193,9 @@ export function OrdersTable({
       />
       {!visible.length && (
         <p className="mt-3 text-sm text-bareeq-espresso/60">
-          Orders stay safely in the queue when this screen is closed or
-          reconnecting.
+          {tr(
+            'Orders stay safely in the queue when this screen is closed or reconnecting.',
+          )}
         </p>
       )}
     </>

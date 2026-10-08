@@ -1,3 +1,4 @@
+import { useCopy } from '@/i18n/i18n-provider';
 import Link from '@/router';
 import { useI18n } from '@/i18n/i18n-provider';
 import { OrderAmounts } from '@/features/orders/components/order-amounts';
@@ -31,6 +32,8 @@ export function OrderSummary({
   | 'deliveryMinor'
   | 'estimatedTotal'
 >) {
+  const tr = useCopy();
+
   const { isArabic } = useI18n();
   return (
     <aside className="order-summary">
@@ -85,12 +88,12 @@ export function OrderSummary({
       )}
       {!canOrder && (
         <p role="alert">
-          Remove unavailable items or choose their required size.
+          {tr('Remove unavailable items or choose their required size.')}
         </p>
       )}
       {!checkout && !staff && (
         <Link className="button light" href="/checkout">
-          Continue to checkout
+          {tr('Continue to checkout')}
         </Link>
       )}
     </aside>

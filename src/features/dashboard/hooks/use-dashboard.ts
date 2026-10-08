@@ -13,7 +13,7 @@ export function useDashboard(roleHint: boolean | null = null) {
     [showPassword, setShowPassword] = useState(false),
     [error, setError] = useState(''),
     [busy, setBusy] = useState(false),
-    [view, setView] = useState('orders'),
+    [view, setView] = useState(roleHint === false ? 'counter' : 'orders'),
     [search, setSearch] = useState(''),
     [filter, setFilter] = useState('all');
   const [selected, setSelected] = useState<any>(null),
@@ -34,6 +34,7 @@ export function useDashboard(roleHint: boolean | null = null) {
     enabling,
     notificationMessage,
     enableAlerts,
+    unreadCount,
   } = useOrderAlerts({
     founder,
     allowed: !!allowed,
@@ -41,9 +42,15 @@ export function useDashboard(roleHint: boolean | null = null) {
     selected,
     setSelected,
     userId: identity.data?.user,
+    view,
   });
   useEffect(() => {
     setFilter(founder ? 'pending' : 'all');
+    setView(
+      new URLSearchParams(location.search).has('order') || founder
+        ? 'orders'
+        : 'counter',
+    );
   }, [founder]);
   useEffect(() => {
     if (selected && orders.data)
@@ -157,6 +164,7 @@ export function useDashboard(roleHint: boolean | null = null) {
     enabling,
     notificationMessage,
     enableAlerts,
+    unreadCount,
   };
 }
 export type DashboardController = ReturnType<typeof useDashboard>;

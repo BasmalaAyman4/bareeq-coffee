@@ -1,3 +1,4 @@
+import { useCopy } from '@/i18n/i18n-provider';
 import { UIButton } from '@/components/ui/button';
 import { Field } from '@/components/ui/field';
 import { ImageUpload } from '@/components/ui/image-upload';
@@ -33,10 +34,12 @@ export function ProductEditorModal({
   | 'save'
   | 'uploadImage'
 >) {
+  const tr = useCopy();
+
   return (
     <Dialog
       open={!!edit}
-      title={edit?.name ? `Edit ${edit.name}` : 'Add product'}
+      title={edit?.name ? `Edit ${edit.name}` : tr('Add product')}
       onClose={() => {
         if (!busy && !uploading) {
           setImageFile(null);
@@ -54,7 +57,7 @@ export function ProductEditorModal({
               setEdit(null);
             }}
           >
-            Cancel
+            {tr('Cancel')}
           </UIButton>
           <UIButton
             type="submit"
@@ -62,7 +65,7 @@ export function ProductEditorModal({
             disabled={busy || uploading || !!imageFile}
             loading={busy}
           >
-            {uploading ? 'Uploading image…' : 'Save product'}
+            {uploading ? tr('Uploading image…') : tr('Save product')}
           </UIButton>
         </>
       }
@@ -90,14 +93,16 @@ export function ProductEditorModal({
               file={imageFile}
               previewUrl={edit.image ?? ''}
               title={
-                edit.image ? 'Replace product image' : 'Upload product image'
+                edit.image
+                  ? tr('Replace product image')
+                  : tr('Upload product image')
               }
               hint="JPG, PNG or WebP · maximum 2 MB"
               onInvalid={setError}
               onChange={(file) => void uploadImage(file)}
             />
           </div>
-          <Field label="Product name (English)">
+          <Field label={tr('Product name (English)')}>
             <TextInput
               required
               value={edit.name ?? ''}
@@ -116,7 +121,7 @@ export function ProductEditorModal({
             />
           </Field>
           <Field
-            label="Website link name"
+            label={tr('Website link name')}
             hint="Lowercase letters, numbers, and hyphens only."
           >
             <TextInput
@@ -132,7 +137,7 @@ export function ProductEditorModal({
               }
             />
           </Field>
-          <Field label="Category">
+          <Field label={tr('Category')}>
             <Select
               value={edit.category_id}
               onChange={(event) =>
@@ -146,7 +151,7 @@ export function ProductEditorModal({
               ))}
             </Select>
           </Field>
-          <Field label="Price (EGP)">
+          <Field label={tr('Price (EGP)')}>
             <TextInput
               type="number"
               min="0"
@@ -163,7 +168,7 @@ export function ProductEditorModal({
               }
             />
           </Field>
-          <Field className="sm:col-span-2" label="Description">
+          <Field className="sm:col-span-2" label={tr('Description')}>
             <TextArea
               value={edit.description ?? ''}
               onChange={(event) =>

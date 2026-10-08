@@ -336,6 +336,7 @@ Deno.serve(async (req) => {
           p_user: a.user,
           p_session: a.session,
         });
+        if (body.next === 'new') dispatchNotifications();
         break;
       }
       case 'receipt': {

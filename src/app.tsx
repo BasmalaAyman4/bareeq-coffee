@@ -1,3 +1,4 @@
+import { useCopy } from '@/i18n/i18n-provider';
 import { MenuStatus } from '@/features/catalog/components/menu-status';
 import { useMenu, useProducts } from '@/features/catalog/hooks/use-menu';
 import { CartProvider } from '@/providers/cart-provider';
@@ -28,18 +29,19 @@ export function App() {
   );
 }
 function AppContent() {
+  const tr = useCopy();
+
   const products = useProducts();
   const menu = useMenu();
   const rawPath = usePathname();
-  const path =
-    rawPath.replace(/\/index\.html$/, '').replace(/\/$/, '') || '/';
+  const path = rawPath.replace(/\/index\.html$/, '').replace(/\/$/, '') || '/';
   const product = path.startsWith('/product/')
     ? products.find((item) => item.slug === path.slice('/product/'.length))
     : undefined;
 
   useEffect(() => {
-    document.title = `${product?.name || pageTitles[path] || 'Page not found'} | Bareeq`;
-  }, [path, product]);
+    document.title = `${tr(product?.name || pageTitles[path] || 'Page not found')} | ${tr('Bareeq')}`;
+  }, [path, product, tr]);
 
   function renderPage() {
     switch (path) {
@@ -66,7 +68,7 @@ function AppContent() {
       default:
         return path.startsWith('/product/') && menu.isPending ? (
           <div className="wrap page-content" role="status">
-            Loading your selection…
+            {tr('Loading your selection…')}
           </div>
         ) : product ? (
           <ProductPage key={product.id} product={product} />

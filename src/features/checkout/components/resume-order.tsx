@@ -1,3 +1,4 @@
+import { useCopy } from '@/i18n/i18n-provider';
 import { api } from '@/services/api';
 
 import type { Controller } from '@/features/checkout/hooks/use-checkout';
@@ -12,12 +13,15 @@ export function ResumeOrder({
   Controller,
   'setOrder' | 'pending' | 'busy' | 'run' | 'submit' | 'setConfirmationOpen'
 >) {
+  const tr = useCopy();
+
   return (
     <section className="checkout-panel">
-      <h2>Resume your order</h2>
+      <h2>{tr('Resume your order')}</h2>
       <p>
-        A saved submission needs checking. Retrying uses the same order
-        reference and cannot create a duplicate.
+        {tr(
+          'A saved submission needs checking. Retrying uses the same order reference and cannot create a duplicate.',
+        )}
       </p>
       <button
         className="button"
@@ -35,7 +39,7 @@ export function ResumeOrder({
           })
         }
       >
-        Check / retry saved order
+        {tr('Check / retry saved order')}
       </button>
     </section>
   );

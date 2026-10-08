@@ -1,3 +1,4 @@
+import { useCopy } from '@/i18n/i18n-provider';
 import { UIButton } from '@/components/ui/button';
 import { Field } from '@/components/ui/field';
 import { TextInput } from '@/components/ui/input';
@@ -13,6 +14,8 @@ export function PasswordForm({
   founder?: boolean;
   forced?: boolean;
 }) {
+  const tr = useCopy();
+
   const [password, setPassword] = useState(''),
     [confirm, setConfirm] = useState(''),
     [target, setTarget] = useState('self'),
@@ -47,16 +50,16 @@ export function PasswordForm({
         }
       }}
     >
-      <h2>{forced ? 'Set your new password' : 'Password settings'}</h2>
+      <h2>{forced ? tr('Set your new password') : tr('Password settings')}</h2>
       {founder && (
-        <Field label="Account">
+        <Field label={tr('Account')}>
           <Select value={target} onChange={(e) => setTarget(e.target.value)}>
-            <option value="self">My Founder account (10)</option>
-            <option value="cashier">Reset Cashier account (00)</option>
+            <option value="self">{tr('My Founder account (10)')}</option>
+            <option value="cashier">{tr('Reset Cashier account (00)')}</option>
           </Select>
         </Field>
       )}
-      <Field label="New password">
+      <Field label={tr('New password')}>
         <TextInput
           type="password"
           autoComplete="new-password"
@@ -67,7 +70,7 @@ export function PasswordForm({
           onChange={(e) => setPassword(e.target.value)}
         />
       </Field>
-      <Field label="Confirm password">
+      <Field label={tr('Confirm password')}>
         <TextInput
           type="password"
           autoComplete="new-password"
@@ -77,9 +80,9 @@ export function PasswordForm({
         />
       </Field>
       <UIButton disabled={busy} loading={busy} className="button">
-        Save password
+        {tr('Save password')}
       </UIButton>
-      <p role="status">{message}</p>
+      <p role="status">{tr(message)}</p>
     </form>
   );
 }

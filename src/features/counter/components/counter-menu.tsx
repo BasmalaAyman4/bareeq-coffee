@@ -60,7 +60,7 @@ export function CounterMenu({
             className="!min-h-9 !shrink-0 !rounded-lg !px-3 !py-1.5"
             onClick={() => setCategory(item.id)}
           >
-            {item.name}
+            {catalogLabel(item, language)}
           </UIButton>
         ))}
       </div>

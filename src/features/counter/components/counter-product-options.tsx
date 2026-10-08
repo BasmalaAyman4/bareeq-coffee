@@ -1,3 +1,4 @@
+import { useCopy } from '@/i18n/i18n-provider';
 import { UIButton } from '@/components/ui/button';
 import { Dialog } from '@/components/ui/modal';
 import { Select } from '@/components/ui/select';
@@ -24,6 +25,8 @@ export function CounterProductOptions({
   | 'setModifierIds'
   | 'add'
 >) {
+  const tr = useCopy();
+
   const { t, language } = useI18n();
   return (
     <Dialog
@@ -60,7 +63,7 @@ export function CounterProductOptions({
                   .map((variant) => (
                     <option key={variant.id} value={variant.id}>
                       {catalogLabel(variant, language)} ·{' '}
-                      {money(variant.price_minor)}
+                      {tr(money(variant.price_minor))}
                     </option>
                   ))}
               </Select>
@@ -95,7 +98,7 @@ export function CounterProductOptions({
                         />
                         {catalogLabel(modifier, language)}
                       </span>
-                      <strong>{money(modifier.price_minor)}</strong>
+                      <strong>{tr(money(modifier.price_minor))}</strong>
                     </label>
                   ))}
               </div>
@@ -103,7 +106,7 @@ export function CounterProductOptions({
           )}
           {!selected.variants.length && !selected.modifiers.length && (
             <p className="m-0 text-bareeq-espresso/65">
-              This item will be added as shown.
+              {tr('This item will be added as shown.')}
             </p>
           )}
         </div>

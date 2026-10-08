@@ -1,3 +1,4 @@
+import { useCopy } from '@/i18n/i18n-provider';
 import { UIButton } from '@/components/ui/button';
 import { Field } from '@/components/ui/field';
 import { TextInput } from '@/components/ui/input';
@@ -8,6 +9,8 @@ import { useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 
 export function Settings() {
+  const tr = useCopy();
+
   const menu = useMenu(),
     client = useQueryClient();
   const [message, setMessage] = useState('');
@@ -36,16 +39,16 @@ export function Settings() {
             }
           }}
         >
-          <h2>{b.name}</h2>
-          <Field label="InstaPay transfer details">
+          <h2>{tr(b.name)}</h2>
+          <Field label={tr('InstaPay transfer details')}>
             <TextArea
               name="details"
               maxLength={500}
               defaultValue={b.instapay_details ?? ''}
             />
           </Field>
-          <p>Leave blank to keep InstaPay checkout disabled.</p>
-          <Field label="Receipt retention (days)">
+          <p>{tr('Leave blank to keep InstaPay checkout disabled.')}</p>
+          <Field label={tr('Receipt retention (days)')}>
             <TextInput
               name="days"
               type="number"
@@ -54,10 +57,10 @@ export function Settings() {
               defaultValue={b.receipt_retention_days}
             />
           </Field>
-          <UIButton className="button">Save settings</UIButton>
+          <UIButton className="button">{tr('Save settings')}</UIButton>
         </form>
       ))}
-      <p role="status">{message}</p>
+      <p role="status">{tr(message)}</p>
     </>
   );
 }

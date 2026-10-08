@@ -5,8 +5,7 @@ const rawPath =
   location.hash.replace(/^#/, '') ||
   location.pathname.replace(/^\/bareeq-coffee/, '') ||
   '/';
-const appPath =
-  rawPath.replace(/\/index\.html$/, '').replace(/\/$/, '') || '/';
+const appPath = rawPath.replace(/\/index\.html$/, '').replace(/\/$/, '') || '/';
 const app = (
   <ServerPath.Provider value={appPath}>
     <App />

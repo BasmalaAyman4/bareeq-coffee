@@ -11,6 +11,8 @@ import {
   type Language,
   type TranslationKey,
 } from './translations';
+import { arabicCopy } from './copy';
+import { catalogArabic } from './catalog-copy';
 
 type I18nContextValue = {
   language: Language;
@@ -60,4 +62,12 @@ export function useI18n() {
   const context = useContext(I18nContext);
   if (!context) throw new Error('useI18n must be used inside I18nProvider');
   return context;
+}
+
+export function useCopy() {
+  const { isArabic } = useI18n();
+  return (text: string) => {
+    if (!isArabic) return text;
+    return arabicCopy[text] ?? catalogArabic[text] ?? text.replace(/\bEGP\b/g, 'ج.م');
+  };
 }

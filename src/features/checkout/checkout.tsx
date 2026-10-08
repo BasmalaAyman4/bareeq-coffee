@@ -1,3 +1,4 @@
+import { useCopy } from '@/i18n/i18n-provider';
 import { CartItems } from '@/features/checkout/components/cart-items';
 import { CheckoutForm } from '@/features/checkout/components/checkout-form';
 import { OrderConfirmation } from '@/features/checkout/components/order-confirmation';
@@ -13,20 +14,26 @@ export function CartPage({
   checkout?: boolean;
   staff?: boolean;
 }) {
+  const tr = useCopy();
+
   const controller = useCheckout({ checkout, staff });
   const { cart, order, pending, error, busy } = controller;
   return (
     <div className="wrap page-content">
       <div className="page-heading">
         <p className="eyebrow">
-          {staff ? 'Counter order' : checkout ? 'Checkout' : 'Your bag'}
+          {staff
+            ? tr('Counter order')
+            : checkout
+              ? tr('Checkout')
+              : tr('Your bag')}
         </p>
         <h1>
           {order
-            ? 'Your Bareeq order.'
+            ? tr('Your Bareeq order.')
             : checkout
-              ? 'One step closer.'
-              : 'Your Bareeq order.'}
+              ? tr('One step closer.')
+              : tr('Your Bareeq order.')}
         </h1>
       </div>
       {error && !order && (
@@ -41,9 +48,10 @@ export function CartPage({
       ) : !cart.length ? (
         <div className="empty-state">
           <ShoppingBag size={44} />
-          <h2>A little empty, a lot of possibilities.</h2>
+          <h2>{tr('A little empty, a lot of possibilities.')}</h2>
           <Link className="button" href="/menu">
-            Explore the menu <ArrowUpRight size={18} />
+            {tr('Explore the menu')}
+            <ArrowUpRight size={18} />
           </Link>
         </div>
       ) : (

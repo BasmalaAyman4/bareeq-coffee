@@ -1,3 +1,4 @@
+import { useCopy } from '@/i18n/i18n-provider';
 import { cn } from '@/lib/utils';
 import { useEffect, useMemo } from 'react';
 
@@ -23,6 +24,8 @@ export function ImageUpload({
   title = 'Choose an image or drop it here',
   hint = 'JPG, PNG or WebP',
 }: ImageUploadProps) {
+  const tr = useCopy();
+
   const selectedPreview = useMemo(
     () => (file ? URL.createObjectURL(file) : ''),
     [file],
@@ -74,16 +77,17 @@ export function ImageUpload({
         <img
           className="absolute inset-0 size-full object-cover"
           src={preview}
-          alt="Selected upload preview"
+          alt={tr('Selected upload preview')}
         />
       ) : (
         <span className="flex flex-col items-center gap-1.5 text-bareeq-espresso">
-          <strong className="text-base">{title}</strong>
+          <strong className="text-base">{tr(title)}</strong>
           <small className="text-xs font-normal text-bareeq-espresso/60">
-            {hint} · maximum {Math.round(maxBytes / 1024 / 1024)} MB
+            {tr(hint)} {tr('· maximum')} {Math.round(maxBytes / 1024 / 1024)}{' '}
+            {tr('MB')}
           </small>
           <em className="mt-2 rounded-full border border-bareeq-burgundy/35 px-3 py-1 text-xs not-italic font-bold text-bareeq-burgundy">
-            Browse files
+            {tr('Browse files')}
           </em>
         </span>
       )}
