@@ -257,6 +257,7 @@ export const arabicCopy: Record<string, string> = {
   Hidden: 'مخفي',
   'Sold out': 'نفد',
   'Paid at counter': 'مدفوع في الكاونتر',
+  'Paid on website': 'مدفوع من الموقع',
   'Online · Delivery': 'موقع · توصيل',
   Online: 'الموقع',
   'Counter sale': 'كاونتر',

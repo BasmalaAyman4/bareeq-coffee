@@ -335,6 +335,7 @@ main:focus {
   font-size: 15px;
   border-bottom: 1px solid currentColor;
   padding-bottom: 5px;
+  white-space: nowrap;
 }
 
 .category-grid {
@@ -3330,35 +3331,58 @@ html {
   }
 }
 
+[dir='rtl'] .menu-story.is-story .category-grid {
+  left: auto;
+  right: 62%;
+  transform: translate(50%, -50%);
+}
+
+[dir='rtl'] .menu-story.is-story .section-heading {
+  direction: rtl;
+  text-align: right;
+}
+
 /* Compact scenes keep the heading above one touch-friendly product stage. */
 @media (max-width: 1023px) and (prefers-reduced-motion: no-preference) {
   .menu-story.is-story {
-    --story-top: clamp(180px, 24svh, 216px);
+    --story-top: clamp(160px, 22svh, 190px);
     height: 100svh;
     min-height: 0;
     margin-block: 40px;
   }
   .menu-story.is-story .section-heading {
-    top: max(22px, env(safe-area-inset-top));
-    display: block;
+    top: max(16px, env(safe-area-inset-top));
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
     margin: 0;
+    width: 100%;
+  }
+  [dir='rtl'] .menu-story.is-story .section-heading {
+    align-items: flex-start;
+    text-align: right;
   }
   .menu-story.is-story .section-heading .eyebrow {
     font-size: 11px;
-    margin-bottom: 10px;
+    margin-bottom: 2px;
   }
   .menu-story.is-story .section-heading h2 {
-    font-size: clamp(30px, 8vw, 42px);
-    line-height: 1.08;
+    font-size: clamp(21px, 5.5vw, 32px);
+    line-height: 1.2;
     margin: 0;
   }
   .menu-story.is-story .section-heading .text-link {
-    margin-top: 10px;
-    min-height: 32px;
+    margin-top: 6px;
+    min-height: 28px;
     font-size: 13px;
+    white-space: nowrap;
+    flex-shrink: 0;
   }
-  .menu-story.is-story .category-grid {
+  .menu-story.is-story .category-grid,
+  [dir='rtl'] .menu-story.is-story .category-grid {
     left: 50%;
+    right: auto;
     top: var(--story-top);
     width: min(88%, 360px);
     height: min(

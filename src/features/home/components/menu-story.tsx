@@ -17,8 +17,8 @@ export function MenuStory({}: {}) {
         <div>
           <p className="eyebrow">{tr('Explore our menu')}</p>
           <h2>
-            {tr('Your favourites,')}
-            <br />
+            {tr('Your favourites,')}{' '}
+            <br className="hidden sm:inline" />
             {tr('brighter.')}
           </h2>
         </div>

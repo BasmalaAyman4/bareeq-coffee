@@ -1,6 +1,5 @@
 import { useCopy } from '@/i18n/i18n-provider';
 import { Dialog } from '@/components/ui/modal';
-import { nextStatus } from '@/features/orders/order-display';
 import { money } from '@/lib/money';
 import { api } from '@/services/api';
 
@@ -78,7 +77,6 @@ export function OrderDetailsModal({
             deliveryMinor={selected.delivery_minor ?? 0}
             totalMinor={selected.total_minor}
           />
-          <p>{tr(selected.status.replaceAll('_', ' '))}</p>
           {founder && selected.payment_method === 'instapay' && (
             <>
               <button
@@ -132,30 +130,6 @@ export function OrderDetailsModal({
               )}
             </>
           )}
-          {!founder &&
-            selected.source !== 'cashier' &&
-            nextStatus[selected.status] && (
-              <div className="staff-actions">
-                <button
-                  disabled={busy}
-                  className="button"
-                  onClick={() =>
-                    transition(selected, nextStatus[selected.status])
-                  }
-                >
-                  {nextStatus[selected.status] === 'completed'
-                    ? t('completed')
-                    : tr(nextStatus[selected.status])}
-                </button>
-                <button
-                  disabled={busy}
-                  className="button outline"
-                  onClick={() => transition(selected, 'cancelled')}
-                >
-                  {t('cancel')} {t('orders').toLowerCase()}
-                </button>
-              </div>
-            )}
         </>
       )}
     </Dialog>

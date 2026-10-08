@@ -45,6 +45,7 @@ export function useMenuStory() {
           pin?.kill();
           gsap.set(cup, { clearProps: 'all' });
           const compact = window.innerWidth < 1024;
+          const isRtl = document.documentElement.dir === 'rtl';
           // svh keeps the scene stable while a phone's browser toolbar retracts.
           const sceneHeight = menu.clientHeight;
           const rect = scene.getBoundingClientRect();
@@ -72,6 +73,8 @@ export function useMenuStory() {
             sy +
             (compact ? 18 : 30);
           const distance = window.innerWidth * 0.9;
+          const cardInX = isRtl ? -distance : distance;
+          const cardOutX = isRtl ? distance : -distance;
           const flight = menuTop / sceneHeight;
           const scale = compact
             ? Math.min(
@@ -83,10 +86,11 @@ export function useMenuStory() {
           const leftArc = compact
             ? Math.min(window.innerWidth * 0.2, Math.max(0, cupRect.left - 18))
             : window.innerWidth * 0.27;
+          const arcSign = isRtl ? 1 : -1;
           const drop = compact
             ? Math.min(72, Math.max(0, sceneHeight - cupRect.bottom - 20))
             : Math.min(130, sceneHeight * 0.12);
-          gsap.set(cards, { x: distance, rotation: 5, scale: 0.94 });
+          gsap.set(cards, { x: cardInX, rotation: isRtl ? -5 : 5, scale: 0.94 });
           gsap.set(cards[0], { x: 0, rotation: 0, scale: 1 });
           cards.forEach((card, i) => {
             card.inert = i !== 0;
@@ -127,11 +131,11 @@ export function useMenuStory() {
                 path: [
                   { x: 0, y: 0 },
                   {
-                    x: compact ? -leftArc * 0.7 : -window.innerWidth * 0.2,
+                    x: arcSign * (compact ? leftArc * 0.7 : window.innerWidth * 0.2),
                     y: compact ? dy * 0.2 + drop : drop,
                   },
                   {
-                    x: -leftArc,
+                    x: arcSign * leftArc,
                     y: compact ? dy * 0.55 + drop : Math.max(dy + 110, 120),
                   },
                   { x: dx, y: dy },
@@ -139,7 +143,7 @@ export function useMenuStory() {
                 curviness: 1.15,
               },
               scale,
-              rotation: -10,
+              rotation: isRtl ? 10 : -10,
             },
             0,
           );
@@ -149,8 +153,8 @@ export function useMenuStory() {
             timeline.to(
               cards[i],
               {
-                x: -distance,
-                rotation: -5,
+                x: cardOutX,
+                rotation: isRtl ? 5 : -5,
                 scale: 0.94,
                 duration: 0.8,
                 ease: 'power2.inOut',
@@ -172,9 +176,9 @@ export function useMenuStory() {
               timeline.to(
                 cup,
                 {
-                  x: dx - distance,
+                  x: dx + cardOutX,
                   y: dy + (compact ? 12 : 35),
-                  rotation: -18,
+                  rotation: isRtl ? 18 : -18,
                   scale: scale * 0.94,
                   duration: 0.8,
                   ease: 'power2.inOut',

@@ -1,9 +1,3 @@
-export const nextStatus: Record<string, string> = {
-  new: 'accepted',
-  accepted: 'preparing',
-  preparing: 'ready',
-  ready: 'completed',
-};
 export const statusTone = (status: string, order?: any) => {
   if (order?.source === 'cashier') return 'success';
   if (['completed', 'ready'].includes(status)) return 'success';
@@ -13,8 +7,17 @@ export const statusTone = (status: string, order?: any) => {
   if (['new', 'accepted', 'preparing'].includes(status)) return 'brand';
   return 'neutral';
 };
-export const statusLabel = (status: string, order?: any) =>
-  order?.source === 'cashier' ? 'Paid at counter' : status.replaceAll('_', ' ');
+export const statusLabel = (status: string, order?: any) => {
+  if (order?.source === 'cashier') return 'Paid at counter';
+  if (order?.source === 'web') {
+    if (status === 'completed') return 'Paid on website';
+    if (order.payment_method === 'instapay' && paymentStatus(order) === 'verified') {
+      return 'Paid on website';
+    }
+    return 'Paid on website';
+  }
+  return status.replaceAll('_', ' ');
+};
 export const paymentStatus = (order: any) =>
   Array.isArray(order.payments)
     ? order.payments[0]?.status
