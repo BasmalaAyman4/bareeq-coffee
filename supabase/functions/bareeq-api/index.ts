@@ -255,6 +255,8 @@ Deno.serve(async (req) => {
           p_user: actor?.user ?? null,
           p_session: actor?.session ?? null,
         });
+        if (p.source === 'web' && result.status === 'new')
+          dispatchNotifications();
         break;
       }
       case 'order':
