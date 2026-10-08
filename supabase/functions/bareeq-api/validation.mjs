@@ -70,10 +70,10 @@ export function checkout(value) {
   if (
     (value.source === 'web' &&
       (!['cash', 'instapay'].includes(value.payment_method) ||
-        !['dine_in', 'takeaway', 'delivery'].includes(value.fulfillment))) ||
+        !['takeaway', 'delivery', 'dine_in'].includes(value.fulfillment))) ||
     (value.source === 'cashier' &&
       (!['cash', 'card'].includes(value.payment_method) ||
-        !['counter', 'takeaway'].includes(value.fulfillment)))
+        !['counter', 'takeaway', 'dine_in'].includes(value.fulfillment)))
   )
     throw new Error('INVALID_PAYMENT_METHOD');
   if (value.table_id) uuid(value.table_id);
