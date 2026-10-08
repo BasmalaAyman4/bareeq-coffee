@@ -75,11 +75,6 @@ export function CheckoutForm(c: Controller) {
                 {label('Collection from the café', 'استلام من الكافيه')}
               </option>
               {!c.staff && (
-                <option value="dine_in">
-                  {label('Dine-in', 'داخل الكافيه')}
-                </option>
-              )}
-              {!c.staff && (
                 <option value="delivery">
                   {label('Delivery (+ EGP 30)', 'توصيل (+30 جنيه)')}
                 </option>

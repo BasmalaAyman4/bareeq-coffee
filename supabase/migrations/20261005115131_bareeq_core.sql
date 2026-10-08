@@ -110,7 +110,8 @@ begin
   role_name=public.bareeq_staff(p_user,p_session);
   if role_name is null or role_name not in ('founder','cashier') then raise exception 'FORBIDDEN'; end if;
  end if;
- if p->>'source' not in ('web','cashier') or p->>'fulfillment' not in ('takeaway','dine_in') or p->>'payment_method' not in ('cash','instapay') then raise exception 'INVALID_ORDER'; end if;
+ if p->>'source' not in ('web','cashier') then raise exception 'INVALID_ORDER'; end if;
+ if (p->>'source'='web' and (p->>'payment_method' not in ('cash','instapay') or p->>'fulfillment' not in ('takeaway','dine_in'))) or (p->>'source'='cashier' and (p->>'payment_method' not in ('cash','card') or p->>'fulfillment' not in ('counter','takeaway'))) then raise exception 'INVALID_PAYMENT_METHOD'; end if;
  if p->>'table_id' is not null and not exists(select 1 from public.cafe_tables where id=(p->>'table_id')::uuid and branch_id=(p->>'branch_id')::uuid and active) then raise exception 'INVALID_TABLE'; end if;
  q=public.bareeq_quote(p);
  if p->>'quote_hash' is distinct from q->>'quote_hash' then return jsonb_build_object('price_changed',true,'quote',q); end if;
